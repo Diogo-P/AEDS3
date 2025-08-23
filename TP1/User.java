@@ -5,7 +5,7 @@ class User{
     private int hashSenha;
     private String perguntaSecreta;
     private String respostaSecreta;
-    private 
+    public
 
     int getId(){
         return this.id;
