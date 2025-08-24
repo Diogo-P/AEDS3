@@ -1,5 +1,5 @@
 import java.util.Scanner;
-public class SGLSP{
+class Acesso{
 
     public static void telaMenu(){
         System.out.println("PresenteFácil 1.0");
@@ -146,4 +146,5 @@ public class SGLSP{
 //O menu procede de acordo com a opção
         menu(opt);
     }
+
 }
