@@ -1,7 +1,7 @@
 package model;
 
-import java.util.ArrayList;
 import aeds3.*;
+import java.util.ArrayList;
 
 public class ArquivoUsuario extends Arquivo<Usuario> {
 

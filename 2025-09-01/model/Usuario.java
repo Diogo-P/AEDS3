@@ -1,35 +1,34 @@
 package model;
 
+import aeds3.Entidade;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-
-import aeds3.Entidade;
 
 public class Usuario implements Entidade {
 
     private int id;
     private String nome;
     private String email;
-    private int hashSenha;
+    private String hashSenha;
     private String perguntaSecreta;
     private String respostaSecreta;
     private boolean ativo;
 
     public Usuario() {
-        this(-1, "", "", 0, "", "", true);
+        this(-1, "", "", "", "", "", true);
     }
 
-    public Usuario(String nome, String email, int hashSenha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
+    public Usuario(String nome, String email, String hashSenha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
         this(-1, nome, email, hashSenha, perguntaSecreta, respostaSecreta, ativo);
     }
 
-    public Usuario(int id, String nome, String email, int hashSenha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
+    public Usuario(int id, String nome, String email, String senha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.hashSenha = hashSenha;
+        this.hashSenha = HashUtil.gerarHash(senha);
         this.perguntaSecreta = perguntaSecreta;
         this.respostaSecreta = respostaSecreta;
         this.ativo = ativo;
@@ -61,11 +60,11 @@ public class Usuario implements Entidade {
         this.email = email;
     }
 
-    public int getHashSenha() {
+    public String getHashSenha() {
         return hashSenha;
     }
 
-    public void setHashSenha(int hashSenha) {
+    public void setHashSenha(String hashSenha) {
         this.hashSenha = hashSenha;
     }
 
@@ -99,7 +98,7 @@ public class Usuario implements Entidade {
         dos.writeInt(this.id);
         dos.writeUTF(this.nome);
         dos.writeUTF(this.email);
-        dos.writeInt(this.hashSenha);
+        dos.writeUTF(this.hashSenha);
         dos.writeUTF(this.perguntaSecreta);
         dos.writeUTF(this.respostaSecreta);
         dos.writeBoolean(this.ativo);
@@ -112,7 +111,7 @@ public class Usuario implements Entidade {
         this.id = dis.readInt();
         this.nome = dis.readUTF();
         this.email = dis.readUTF();
-        this.hashSenha = dis.readInt();
+        this.hashSenha = dis.readUTF();
         this.perguntaSecreta = dis.readUTF();
         this.respostaSecreta = dis.readUTF();
         this.ativo = dis.readBoolean();
@@ -128,4 +127,5 @@ public class Usuario implements Entidade {
                 + "\nResposta Secreta...: " + this.respostaSecreta
                 + "\nAtivo..............: " + (this.ativo ? "Sim" : "Não");
     }
+
 }
