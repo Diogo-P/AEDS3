@@ -2,6 +2,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import model.*;
+import model.Lista;
+import model.Usuario;
 
 public class Principal {
 
@@ -58,28 +60,35 @@ public class Principal {
                                 System.out.println("PresenteFácil 1.0");
                                 System.out.println("-----------------");
                                 System.out.println("> Início > Minhas listas ");
-                                System.out.println("(N) Nova lista a partir de ID de usuário");
-                                System.out.println("(V) Volta");
-                                System.out.println("(S) Sair");
+                                System.out.println();
+                                System.out.println("(C) Criar lista");
+                                System.out.println("(R) Ler e exibir listas");
+                               
+                                System.out.println("(U) Atualizar lista");
+                                System.out.println("(D) Deletar lista");
+                                System.out.println();
+                                System.out.println("(B) Volta");
+                                System.out.println("(E) Sair");
 //Lista as listas que o própio usuário possui
-                                try {
-                                    int uid=0;
-                                    Lista[] queryListas = listaArq.getAllLists(uid);
-                                    if (queryListas != null) {
-                                        System.out.println("\nListas encontradas:\n");
-                                        for ( Lista lista : queryListas ) {
-                                            System.out.println(lista.toString());
-                                        }
-                                    } else {
-                                        System.out.println("\nLista não encontrada.");
-                                    }
-                                } catch (Exception e) {
-                                    System.err.println("\nErro no sistema.");
-                                }
+                                // try {
+                                //     int uid=0;
+                                //     Lista[] queryListas = listaArq.getAllLists(uid);
+                                //     if (queryListas != null) {
+                                //         System.out.println("AQ");
+                                //         System.out.println("\nListas encontradas:\n");
+                                //         for ( Lista lista : queryListas ) {
+                                //             System.out.println(lista.toString());
+                                //         }
+                                //     } else {
+                                //         System.out.println("\nLista não encontrada.");
+                                //     }
+                                // } catch (Exception e) {
+                                //     System.err.println("\nErro no sistema.");
+                                // }
                                 opcao_usuario = sc.nextLine().trim();
 //Criar nova lista
                                 switch(opcao_usuario.toUpperCase()){
-                                    case "N":
+                                    case "C":
                                          try {
                                             boolean usuarioEncontrado = false;
                                             String nomeU;
@@ -143,6 +152,141 @@ public class Principal {
                                             }
                                         } catch (Exception e) {
                                             System.err.println("Erro durante coleta de informações de usuário, lista ou criação da lista: " + e.getMessage());
+                                        }
+                                    break;
+//Exibir listas
+                                    case "R":
+                                        try {
+                                            System.out.println("(R1) Ler e exibir minhas listas");
+                                            System.out.println("(R2) Acessar lista de outrem");
+                                            System.out.println("");
+                                            System.out.print("Opcão:");
+                                
+                                            String codigo;
+                                            do { 
+                                                System.out.println("\nDigite codigo da lista (10 caracteres apenas): ");
+                                                codigo = sc.nextLine().trim();
+                                                if (codigo.length() != 10) {
+                                                    System.err.println("Lista não pode ter código com menos de 10 caracteres efetivos");
+                                                }
+                                            } while (codigo.length() != 10);
+                                            
+                                            try {
+                                                Lista queryLista = listaArq.read(codigo);
+                                                if (queryLista != null) {
+                                                    System.out.println("\nLista encontrada!\n");
+                                                    System.out.println(queryLista.toString());
+                                                } else {
+                                                    System.out.println("\nLista não encontrada.");
+                                                }
+                                            } catch (Exception e) {
+                                                System.err.println("\nErro no sistema.");
+                                            }
+                                        } catch (Exception e) {
+                                            System.err.println("Erro durante coleta de informações de lista ou criação da lista: " + e.getMessage());
+                                        }
+                                    break;
+//Atualizar listas
+                                    case "U":
+                                         try {
+                                            System.out.println("\nEntre com o nome da lista que deseja alterar: ");
+                                            String nomeLista = sc.nextLine().trim();
+
+                                            boolean listaEncontrada = false;
+                                            Lista antiga = listaArq.read(nomeLista);
+                                            //Lista antiga = listaArq.read(codigo);
+
+                                            System.out.println("Atributos da lista a ser mudada: ");
+                                            System.out.println(antiga.toString());
+
+                                            do {
+                                                if ( antiga != null ) {
+                                                    listaEncontrada = true;
+                                                    break;
+                                                }
+                                                System.out.println("\nLista não encontrada.");
+                                                System.out.println("\nEntre com o nome da lista que deseja alterar: ");
+                                                nomeLista = sc.nextLine().trim();
+                                                antiga = listaArq.read(nomeLista);
+                                            } while ( !listaEncontrada );
+                                            String novoNome;
+                                            do { 
+                                                System.out.println("\nNovo nome da lista: (Enter para manter)");
+                                                novoNome = sc.nextLine().trim();
+                                                if (novoNome.isEmpty()) {
+                                                    break;
+                                                }                            
+                                                else if (novoNome.length() < 4) {
+                                                    System.err.println("Lista não pode ter nome vazio ou ter apenas caracteres de espaço ou ter menos de 4 caracteres efetivos");
+                                                } 
+                                            } while (novoNome.length() < 4);
+
+                                            String descricao;
+                                            do { 
+                                                System.out.println("\nNova descrição da lista: (Enter para manter)");
+                                                descricao = sc.nextLine().trim();
+                                                if (descricao.isEmpty()) {
+                                                    break;
+                                                }                            
+                                                else if (descricao.length() < 4) {
+                                                    System.err.println("Lista não pode ter descrição vazia ou ter apenas caracteres de espaço ou ter menos de 4 caracteres efetivos");
+                                                } 
+                                            } while (descricao.length() < 4);
+
+                                            boolean dataValida = false;
+                                            LocalDate limite = LocalDate.now();
+                                            DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                            do { 
+                                                try {
+                                                    System.out.print("\nData limite da nova lista: (FORMATO DD/MM/AAAA, números sem décimos devem ter 0x) (Enter para manter) ");
+                                                    String input = sc.nextLine().trim();
+                                                    if ( input.isEmpty() ) { break; }
+                                                    limite = LocalDate.parse(input,formatador);
+                                                    dataValida = true;
+                                                } catch (Exception e) {
+                                                    System.err.println("Data limite da lista deve ser no formato DD/MM/AAAA.");
+                                                }
+                                            } while (!dataValida);
+                                            
+                                            try {
+                                                Lista novaLista = new Lista(antiga.getID(),novoNome,descricao,antiga.getCriacao(),limite,antiga.getCodigo(),antiga.getUID());
+                                                listaArq.update(novaLista);
+                                                System.out.println("\nSucesso na alteração da lista!");
+                                                System.out.println(novaLista.toString());
+                                            } catch (Exception e) {
+                                                System.err.println("\nErro na alteração da lista!");
+                                                e.printStackTrace();
+                                            }
+                                        } catch (Exception e) {
+                                            System.err.println("Erro durante coleta de informações de lista ou alteração da lista: " + e.getMessage());
+                                        }
+                                    break;
+//Apagar Lista
+                                    case "D":
+                                        try {
+                                            System.out.println("\nEntre com o nome da lista que deseja deletar: ");
+                                            String nomeLista = sc.nextLine().trim();
+
+                                            Lista listaDeletada = listaArq.read(nomeLista);
+
+                                            String resp;
+                                            do { 
+                                                System.out.println("\nLista encontrada. Deseja prosseguir com remoção? (S/N)");
+                                                resp = sc.nextLine().trim().toUpperCase();
+                                                if ( resp.compareTo("S") == 0 || resp.compareTo("N") == 0) { break; }
+                                                System.out.println("\nOpção incorreta, prosseguir com remoção? (S/N)");
+                                            } while ( resp.compareTo("S") != 0 || resp.compareTo("N") != 0 );
+
+                                            if ( resp.compareTo("S") == 0 ) {
+                                                if ( listaArq.delete(listaDeletada) ) {
+                                                    System.out.println("Lista deletada com sucesso!");
+                                                } else {
+                                                    System.err.println("Falha no sistema ao deletar lista");
+                                                }
+                                            }
+
+                                        } catch (Exception e) {
+                                            System.err.println("Erro remoção deletar listar: " + e.getMessage());
                                         }
                                     break;
 //Voltar para o menu principal
