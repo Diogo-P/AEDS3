@@ -20,8 +20,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+
 
 public class HashExtensivel<T extends RegistroHashExtensivel> {
 
@@ -261,12 +262,15 @@ public class HashExtensivel<T extends RegistroHashExtensivel> {
     // Para efeito de determinar o cesto em que o elemento deve ser inserido,
     // só serão considerados valores absolutos da chave.
     protected int hash(int chave) {
-      return Math.abs(chave) % (int) Math.pow(2, profundidadeGlobal);
+      
+      int nonNeg = chave & 0x7fffffff; // Para não ter número negativo
+      return nonNeg % (int) Math.pow(2, profundidadeGlobal);
     }
 
     // Método auxiliar para atualizar endereço ao duplicar o diretório
     protected int hash2(int chave, int pl) { // cálculo do hash para uma dada profundidade local
-      return Math.abs(chave) % (int) Math.pow(2, pl);
+      int nonNeg = chave & 0x7fffffff;
+      return nonNeg % (int) Math.pow(2, pl);
     }
 
   }
@@ -317,9 +321,34 @@ public class HashExtensivel<T extends RegistroHashExtensivel> {
     arqCestos.read(ba);
     c.fromByteArray(ba);
 
-    // Testa se a chave já não existe no cesto
+     // Testa se a chave já não existe no cesto
     if (c.read(elem.hashCode()) != null)
       throw new Exception("Elemento já existe");
+    
+    /* 
+      // Permite colisões: se já existir elemento com o mesmo hash, apenas
+    // impede a inserção quando for uma duplicata exata (mesmo conteúdo bytes).
+    int hashElem = elem.hashCode();
+    T candidato = c.read(hashElem);
+    if (candidato != null) {
+      // percorre todos os elementos do cesto com o mesmo hash e compara bytes
+      for (int k = 0; k < c.quantidade; k++) {
+        T existente = c.elementos.get(k);
+        if (existente.hashCode() == hashElem) {
+          try {
+            if (Arrays.equals(existente.toByteArray(), elem.toByteArray())) {
+              throw new Exception("Elemento já existe");
+            }
+          } catch (Exception ex) {
+            // se não conseguir comparar bytes, ignora e permite inserção
+          }
+        }
+      }
+    }
+
+    */
+
+    
 
     // Testa se o cesto já não está cheio
     // Se não estiver, create o par de chave e dado

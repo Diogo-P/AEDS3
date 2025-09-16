@@ -135,6 +135,8 @@ public class Principal {
                                             } catch (Exception e) {
                                                 System.err.println("Erro na criação da lista: " + e.getMessage());
                                             }
+                                            System.out.println("\nPressione ENTER para continuar...");
+                                            sc.nextLine();
                                             break;
 
 
@@ -169,6 +171,8 @@ public class Principal {
                                             } catch (Exception e) {
                                                 System.err.println("Erro ao ler lista: " + e.getMessage());
                                             }
+                                            System.out.println("\nPressione ENTER para continuar...");
+                                            sc.nextLine();
                                             break;
 
                                         case "U":
@@ -209,6 +213,8 @@ public class Principal {
                                             } catch (Exception e) {
                                                 System.err.println("Erro na atualização: " + e.getMessage());
                                             }
+                                            System.out.println("\nPressione ENTER para continuar...");
+                                            sc.nextLine();
                                             break;
 
                                         case "D":
@@ -232,6 +238,8 @@ public class Principal {
                                             } catch (Exception e) {
                                                 System.err.println("Erro ao deletar: " + e.getMessage());
                                             }
+                                            System.out.println("\nPressione ENTER para continuar...");
+                                            sc.nextLine();
                                             break;
 
                                         case "L":
@@ -249,6 +257,8 @@ public class Principal {
                                             } catch (Exception e) {
                                                 System.err.println("Erro ao listar: " + e.getMessage());
                                             }
+                                            System.out.println("\nPressione ENTER para continuar...");
+                                            sc.nextLine();
                                             break;
 
                                         case "E":
@@ -370,7 +380,7 @@ public class Principal {
                         }
                         break;
 
-                    case "4": // Excluir usuário
+                   case "4": // Excluir usuário
                         System.out.print("Email do usuário a excluir: ");
                         String emailExcluir = sc.nextLine().trim();
 //Capta usuário a ser excluído

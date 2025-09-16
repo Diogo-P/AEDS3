@@ -40,9 +40,9 @@ public class ListaArquivo extends Arquivo<Lista> {
             }
         } */
         //lista.setNome(nomeU);
-        lista.setUID(uid);
-        indiceIndiretoUId.create(new ParUIDID(lista.getID(),uid));
-        indiceIndiretoNome.create(new ParUIDNome(lista.UID,lista.getNome()));
+    lista.setUID(uid);
+    indiceIndiretoUId.create(new ParUIDID(uid, lista.getID()));
+    indiceIndiretoNome.create(new ParUIDNome(lista.getUID(), lista.getNome()));
         indiceIndiretoCodigo.create(new ParCodigoID(lista.codigo,id));
         return id;
     }
