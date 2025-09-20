@@ -227,24 +227,28 @@ public class Principal {
                             MenuUsuario menu = new MenuUsuario(usuario.getID());
                             menu.telaMenuUsuario();
                         }
-                        // System.out.print("Email: ");
-                        // String emailLogin = sc.nextLine().trim();
-                        // System.out.print("Senha: ");
-                        // String senhaLogin = sc.nextLine().trim();
+                         
 
-                        // Usuario usuarioLogin = arqUsuarios.readEmail(emailLogin);
-                        // if (usuarioLogin != null && usuarioLogin.getAtivo()) {
-                        //     String hashDigitado = HashUtil.gerarHash(senhaLogin);
-                        //     if (usuarioLogin.getHashSenha().equals(hashDigitado)) {
-                        //         System.out.println("\nLogin realizado com sucesso!");
-                        //         System.out.println(usuarioLogin);
-                        //     } else {
-                        //         System.out.println("\nEmail ou senha incorretos!");
-                        //     }
-                        // } else {
-                        //     System.out.println("\nUsuário não encontrado ou inativo!");
-                        // }
+                         /* 
+                        System.out.print("Email: ");
+                        String emailLogin = sc.nextLine().trim();
+                        System.out.print("Senha: ");
+                        String senhaLogin = sc.nextLine().trim();
+
+                         Usuario usuarioLogin = arqUsuarios.readEmail(emailLogin);
+                        if (usuarioLogin != null && usuarioLogin.getAtivo()) {
+                             String hashDigitado = HashUtil.gerarHash(senhaLogin);
+                             if (usuarioLogin.getHashSenha().equals(hashDigitado)) {
+                              System.out.println("\nLogin realizado com sucesso!");
+                               System.out.println(usuarioLogin);
+                           } else {
+                                System.out.println("\nEmail ou senha incorretos!");
+                            }
+                        } else {
+                            System.out.println("\nUsuário não encontrado ou inativo!");
+                         }
                         break;
+                        */
 
 //Cadastro
                     case "2": // Novo usuário
