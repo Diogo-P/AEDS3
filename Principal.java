@@ -25,11 +25,13 @@ public class Principal {
                 //System.out.println(usuarioLogin);
             } else {
                 System.out.println("\nEmail ou senha incorretos!");
+                return null;
             }
         } else {
                 System.out.println("\nUsuário não encontrado ou inativo!");
+                return null;
         }
-        sc.close();
+       
         return usuarioLogin;
     }
     
@@ -54,7 +56,7 @@ public class Principal {
         resposta = sc.nextLine().trim();
 
         Usuario novoUsuario = new Usuario(nome, email, senha, pergunta, resposta, true);
-        sc.close();
+       
         return novoUsuario;
     }
 
@@ -116,42 +118,7 @@ public class Principal {
         }
     }
 
-    public static void telaListar(ArquivoUsuario arqUsuarios)throws Exception{
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n(1) Buscar por email");
-        System.out.println("(2) Buscar por nome");
-        System.out.print("Opção: ");
-        String listOp = sc.nextLine().trim();
-
-        if (listOp.equals("1")) {
-            System.out.print("Digite o email: ");
-            String emailBusca = sc.nextLine().trim();
-            Usuario usuarioBusca = arqUsuarios.readEmail(emailBusca);
-            if (usuarioBusca != null && usuarioBusca.getAtivo()) {
-                System.out.println("\nUsuário encontrado:");
-                System.out.println(usuarioBusca);
-            } else {
-                System.out.println("\nUsuário não encontrado ou inativo.");
-            }
-        } else if (listOp.equals("2")) {
-            System.out.print("Digite o nome (ou parte dele): ");
-            String nomeBusca = sc.nextLine().trim();
-            Usuario[] usuarios = arqUsuarios.readNome(nomeBusca);
-            if (usuarios.length > 0) {
-                System.out.println("\nUsuários encontrados:");
-                for (Usuario u : usuarios) {
-                    if (u.getAtivo()) {
-                        System.out.println(u);
-                        System.out.println("-------------------------");
-                    }
-                }
-            } else {
-                System.out.println("\nNenhum usuário encontrado com esse nome.");
-            }
-        } else {
-            System.out.println("\nOpção inválida!");
-        }
-    }
+    
 
     public static void telaRecuperar(ArquivoUsuario arqUsuarios)throws Exception{
         Scanner sc = new Scanner(System.in);
@@ -210,8 +177,8 @@ public class Principal {
             System.out.println("(2) Novo usuário");
             System.out.println("(3) Atualizar usuário");
             System.out.println("(4) Excluir usuário");
-            System.out.println("(5) Listar usuários");
-            System.out.println("(6) Recuperar senha");
+           // System.out.println("(5) Listar usuários");
+            System.out.println("(5) Recuperar senha");
             System.out.println("(S) Sair");
             System.out.print("\nOpção: ");
 
@@ -227,6 +194,7 @@ public class Principal {
                             MenuUsuario menu = new MenuUsuario(usuario.getID());
                             menu.telaMenuUsuario();
                         }
+                         break;
                          
 
                          /* 
@@ -329,45 +297,10 @@ public class Principal {
                         break;
 
 
-//Listar usuários
-                    case "5": // Listar usuários
-                        telaListar(arqUsuarios);
-                        // System.out.println("\n(1) Buscar por email");
-                        // System.out.println("(2) Buscar por nome");
-                        // System.out.print("Opção: ");
-                        // String listOp = sc.nextLine().trim();
 
-                        // if (listOp.equals("1")) {
-                        //     System.out.print("Digite o email: ");
-                        //     String emailBusca = sc.nextLine().trim();
-                        //     Usuario usuarioBusca = arqUsuarios.readEmail(emailBusca);
-                        //     if (usuarioBusca != null && usuarioBusca.getAtivo()) {
-                        //         System.out.println("\nUsuário encontrado:");
-                        //         System.out.println(usuarioBusca);
-                        //     } else {
-                        //         System.out.println("\nUsuário não encontrado ou inativo.");
-                        //     }
-                        // } else if (listOp.equals("2")) {
-                        //     System.out.print("Digite o nome (ou parte dele): ");
-                        //     String nomeBusca = sc.nextLine().trim();
-                        //     Usuario[] usuarios = arqUsuarios.readNome(nomeBusca);
-                        //     if (usuarios.length > 0) {
-                        //         System.out.println("\nUsuários encontrados:");
-                        //         for (Usuario u : usuarios) {
-                        //             if (u.getAtivo()) {
-                        //                 System.out.println(u);
-                        //                 System.out.println("-------------------------");
-                        //             }
-                        //         }
-                        //     } else {
-                        //         System.out.println("\nNenhum usuário encontrado com esse nome.");
-                        //     }
-                        // } else {
-                        //     System.out.println("\nOpção inválida!");
-                        // }
-                        break;
+                   
 //Recuperar senha
-                    case "6": // Recuperar senha
+                    case "5": // Recuperar senha
                         telaRecuperar(arqUsuarios);
                         // System.out.print("Digite o email: ");
                         // String emailRecuperar = sc.nextLine().trim();

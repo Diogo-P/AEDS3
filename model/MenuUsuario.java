@@ -1,12 +1,9 @@
-import java.io.RandomAccessFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-
 import model.ArquivoLista;
 import model.ArquivoUsuario;
 import model.Lista;
-import model.Usuario;
 
 public class MenuUsuario{
     private final int id;
@@ -17,7 +14,8 @@ public class MenuUsuario{
         this.id=id;
         arquivoUsuario = new ArquivoUsuario();
         arquivoLista = new ArquivoLista();
-        System.err.println("Erro de arquivoUsuario");
+        
+        //System.err.println("Erro de arquivoUsuario");
         
     }
 
