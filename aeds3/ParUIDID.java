@@ -1,37 +1,36 @@
 package aeds3;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-<<<<<<< HEAD
-public class ParIDEndereco implements RegistroHashExtensivel {
+public class ParUIDID implements RegistroHashExtensivel {
     
-=======
-//Associa o ID ao Endereço de memória
-public class ParIDEndereco implements RegistroHashExtensivel {
->>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
-    private int id;           // chave
-    private long endereco;    // valor
-    private final short TAMANHO = 12;  // tamanho em bytes
+    protected int uid;   // chave; id lista
+    protected int id;    // valor; codigo lista
+    protected final short TAMANHO = 8;  // tamanho em bytes
 
-    public ParIDEndereco() {
-        this.id = -1;
-        this.endereco = -1;
+    public ParUIDID() {
+        this(-1,-1);
     }
 
-    public ParIDEndereco(int id, long end) {
+    public ParUIDID(int id) {
+        this(id,-1);
+    }
+
+    public ParUIDID(int uid, int id) {
+        this.uid = uid;
         this.id = id;
-        this.endereco = end;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    public long getEndereco() {
-        return endereco;
+    public int getUID() {
+        return this.uid;
     }
 
     @Override
@@ -44,22 +43,21 @@ public class ParIDEndereco implements RegistroHashExtensivel {
     }
 
     public String toString() {
-        return "("+this.id + ";" + this.endereco+")";
+        return "("+this.id + ";" + this.uid+")";
     }
 
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeInt(this.uid);
         dos.writeInt(this.id);
-        dos.writeLong(this.endereco);
         return baos.toByteArray();
     }
 
     public void fromByteArray(byte[] ba) throws IOException {
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
+        this.uid = dis.readInt();
         this.id = dis.readInt();
-        this.endereco = dis.readLong();
     }
-
 }

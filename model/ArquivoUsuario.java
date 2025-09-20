@@ -8,7 +8,11 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
     HashExtensivel<ParEmailID> indiceIndiretoEmail;
     ArvoreBMais<ParNomeId> indiceIndiretoNome;
 
+<<<<<<< HEAD
     public ArquivoUsuario() throws Exception{
+=======
+    public ArquivoUsuario() throws Exception {
+>>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
         super("usuario", Usuario.class.getConstructor());
         indiceIndiretoEmail = new HashExtensivel<>(
             ParEmailID.class.getConstructor(), 
@@ -23,14 +27,25 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         );
     }
 
+<<<<<<< HEAD
     public int create(Usuario usuario) throws Exception {
         int id = super.create(usuario);
         indiceIndiretoEmail.create(new ParEmailID(usuario.getEmail(), id));
+=======
+
+    public int create(Usuario usuario) throws Exception {
+//Usa implementação da classe mãe para obter o ID
+        int id = super.create(usuario);
+//Constrói os índices indiretos de nome e email usando os dados de usuário e o ID obtido
+        indiceIndiretoEmail.create(new ParEmailID(usuario.getEmail(), id));
+//
+>>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
         indiceIndiretoNome.create(new ParNomeId(usuario.getNome(), id));
         return id;
     }
 
     public Usuario readEmail(String email) throws Exception {
+<<<<<<< HEAD
         ParEmailID pei = indiceIndiretoEmail.read(ParEmailID.hash(email));
         if (pei == null)
             return null;
@@ -38,6 +53,22 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         return super.read(id);
     }
 
+=======
+//Acessa parEmailID 
+        ParEmailID pei = indiceIndiretoEmail.read(ParEmailID.hash(email));
+        if (pei == null)
+            return null;
+//Capta o ID a partir do par
+        int id = pei.getID();
+//Chama read da super classe que retorna a entidade em bytes
+        return super.read(id);
+    }
+
+     public Usuario readId(int uid) throws Exception { 
+        return super.read(uid);
+    }
+
+>>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
     public Usuario[] readNome(String nome) throws Exception {
         ArrayList<ParNomeId> pnis = indiceIndiretoNome.read(new ParNomeId(nome, -1));
         Usuario[] usuarios = new Usuario[pnis.size()];

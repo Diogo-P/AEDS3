@@ -52,6 +52,7 @@ public class Arquivo<T extends Entidade> {
 
     public T read(int id) throws Exception {
         arquivo.seek(TAM_CABECALHO);
+<<<<<<< HEAD
         ParIDEndereco pie = indiceDireto.read(id);
         if(pie!=null) {
             arquivo.seek(pie.getEndereco());
@@ -62,6 +63,27 @@ public class Arquivo<T extends Entidade> {
                 arquivo.read(vb);
                 T entidade = construtor.newInstance();
                 entidade.fromByteArray(vb);
+=======
+//Pega o par IdEndereço a partir do ID
+        ParIDEndereco pie = indiceDireto.read(id);
+        if(pie!=null) {
+//muda para o endereço referente ao par
+            arquivo.seek(pie.getEndereco());
+//Lê lapide
+            byte lapide = arquivo.readByte();
+//Capta tamanho
+            short tam = arquivo.readShort();
+//Verifica se está ativo
+            if(lapide==' ') {
+//Lê e armazena direto em bytes
+                byte[] vb = new byte[tam];
+                arquivo.read(vb);
+//Constroi objeto de classe abstrata
+                T entidade = construtor.newInstance();
+//Fluxo de bytes do array para a entidade de classe
+                entidade.fromByteArray(vb);
+//Verifica se o produto da recuperação está coerente
+>>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
                 if(entidade.getID() == id) {
                     return entidade;
                 }
@@ -70,6 +92,7 @@ public class Arquivo<T extends Entidade> {
         return null;
     }
 
+<<<<<<< HEAD
     public boolean update(T novaEntidade) throws Exception {
         ParIDEndereco pie = indiceDireto.read(novaEntidade.getID());
         if(pie!=null) {
@@ -85,6 +108,37 @@ public class Arquivo<T extends Entidade> {
                 if(entidade.getID() == novaEntidade.getID()) {
                     byte[] vb2 = novaEntidade.toByteArray();
                     int tam2 = vb2.length;
+=======
+//Operação de atualizar
+    public boolean update(T novaEntidade) throws Exception {
+//Indexação indireta a partir do ID
+        ParIDEndereco pie = indiceDireto.read(novaEntidade.getID());
+        if(pie!=null) {
+//Capta o endereço contido no par
+            long pos = pie.getEndereco();
+//Vai para a posição correta que será atualizada
+            arquivo.seek(pos);
+//Lê o valor da lápide pra ver se está ativo
+            byte lapide = arquivo.readByte();
+//Guarda o tamanho do registro
+            short tam = arquivo.readShort();
+            if(lapide==' ') {
+//Armazena o registro em forma de bytes
+                byte[] vb = new byte[tam];
+//Lê os tam bytes a partir de pos (definido no seek)
+                arquivo.read(vb);
+//Cria um objeto de classe abstrata
+                T entidade = construtor.newInstance();
+//Armazena o valor do vetor de bytes
+                entidade.fromByteArray(vb);
+//Verifica a partir do ID se o conteúdo da entidade lida está correto
+                if(entidade.getID() == novaEntidade.getID()) {
+//Coloca a entidade do parâmetro em um array de baytes
+                    byte[] vb2 = novaEntidade.toByteArray();
+//Guarda o tamanho
+                    int tam2 = vb2.length;
+//
+>>>>>>> f339579cdf2e06d7c0cfe1c0f18cec5118dfb798
                     if(tam2 <= tam) {
                         arquivo.seek(pos+3);
                         arquivo.write(vb2);
