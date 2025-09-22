@@ -53,6 +53,11 @@ public class MenuUsuario {
 
     }
 
+    public Lista opcao_v(String codigo) {
+        Lista lista = arquivoLista.lerCodigo(codigo);
+        return lista;
+    }
+
     public void opcao_r(Lista lista) throws Exception {
 
         try {
@@ -227,6 +232,7 @@ public class MenuUsuario {
             System.out.println("===============================");
             System.out.println("(C) Criar lista");
             System.out.println("(R) Consultar lista");
+            System.out.println("(V) Ver lista de outro usuário");
             System.out.println("(U) Atualizar lista");
             System.out.println("(D) Apagar lista");
             System.out.println();
@@ -267,10 +273,32 @@ public class MenuUsuario {
 
                     opcao_r(usuarioListas[pos]);
                     break;
+                case "V":
+                    System.out.print("Entre com o código da lista para consultar: ");
+                    String codigo;
+                    codigo = sc.nextLine().trim();
+                    do {
+                        System.out.println("ERRO! Código compartilhável deve ter exatamente 10 caracteres. ");
+                        System.out.print("\nEntre com o código da lista para consultar: ");
+                        codigo = sc.nextLine().trim();
+                    } while ( codigo.length() != 10 );
+                    
+                    try {
+                        Lista lista = opcao_v(codigo);
+                        if ( lista != null ) {
+                            System.out.println("Lista encontrada com sucesso: ");
+                            System.out.println(lista.toString());
+
+                        } else {
+                            System.out.println("Lista não encontrada.");
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Erro ao encontrar lista compartilhada. ");
+                    }
+                    break;
                 case "U":
 
                     try {
-
                         System.out.print("Escolha (por posição) uma lista para consultar: ");
                         int posicao = 0;
                         posicao = sc.nextInt();

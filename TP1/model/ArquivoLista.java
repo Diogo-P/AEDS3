@@ -153,6 +153,21 @@ public class ArquivoLista extends Arquivo<Lista> {
         return listasDoUsuario;
     }
 
+    public Lista lerCodigo(String codigo) {
+        try {
+            ParCodigoID pci = indiceIndiretoCodigo.read(ParCodigoID.hash(codigo));
+            if ( pci == null ) {
+                return null;
+            } else {
+                int id = pci.getId();
+                return super.read(id);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro na pesquisa da lista por índice do sistema");
+        }
+        return null;
+    }
+
     // public boolean update(Lista novaLista) throws Exception {
     //     Lista listaAntiga = super.read(novaLista.getID());
     //     String nomeAnterior = listaAntiga.getNome();
