@@ -13,9 +13,9 @@ public class Principal {
     public static Usuario telaLogin(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Email: ");
-        String emailLogin = sc.nextLine().trim();
+        String emailLogin = (sc.nextLine().trim());
         System.out.print("Senha: ");
-        String senhaLogin = sc.nextLine().trim();
+        String senhaLogin = (sc.nextLine().trim());
 
         Usuario usuarioLogin = arqUsuarios.readEmail(emailLogin);
         if (usuarioLogin != null && usuarioLogin.getAtivo()) {
@@ -104,10 +104,13 @@ public class Principal {
     public static void telaExcluir(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Email do usuário a excluir: ");
-        String emailExcluir = sc.nextLine().trim();
-        Usuario usuarioExcluir = arqUsuarios.readEmail(emailExcluir);
+        String emailExcluir = (sc.nextLine().trim());
+        System.out.print("Senha do usuário a excluir: ");
+        String senhaExcluir = (sc.nextLine().trim());
 
-        if (usuarioExcluir != null && usuarioExcluir.getAtivo()) {
+        Usuario usuarioExcluir = arqUsuarios.readEmail(emailExcluir) ;
+
+        if (usuarioExcluir != null && usuarioExcluir.getAtivo()&& (HashUtil.gerarHash(senhaExcluir)).equals(usuarioExcluir.getHashSenha())) {
             if (arqUsuarios.delete(usuarioExcluir.getID())) {
                 System.out.println("\nUsuário excluído com sucesso!");
             } else {

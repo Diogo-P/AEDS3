@@ -170,7 +170,7 @@ public class MenuUsuario {
 
         if (sucesso) {
             if (!arqLista.deleteIndices(lista)) {
-                System.err.println("Erro na remoção dos indices");
+              //  System.err.println("Erro na remoção dos indices");
             }
             System.out.println("Lista removida com sucesso!");
         } else {
@@ -230,8 +230,7 @@ public class MenuUsuario {
             System.out.println("(U) Atualizar lista");
             System.out.println("(D) Apagar lista");
             System.out.println();
-            System.out.println("(B) Voltar");
-            System.out.println("(E) Sair");
+            System.out.println("(S) Sair");
             System.out.println();
             System.out.print("Opção: ");
 
