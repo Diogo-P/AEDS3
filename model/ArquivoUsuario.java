@@ -7,6 +7,7 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
 
     HashExtensivel<ParEmailID> indiceIndiretoEmail;
     ArvoreBMais<ParNomeId> indiceIndiretoNome;
+    //ArvoreBMais<ParIDEndereco> indiceIndiretoID;
 
     public ArquivoUsuario() throws Exception{
         super("usuario", Usuario.class.getConstructor());
@@ -21,6 +22,12 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
             5, 
             "./dados/usuario.nome.db"
         );
+
+        /*indiceIndiretoID = new ArvoreBMais<>(
+            ParIDEndereco.class.getConstructor(),
+            5,
+            "./dados/usuario.id.db"
+        );*/
     }
 
     public int create(Usuario usuario) throws Exception {

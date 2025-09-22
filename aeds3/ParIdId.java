@@ -78,4 +78,8 @@ public class ParIdId implements aeds3.RegistroArvoreBMais<ParIdId> {
     this.id2 = dis.readInt();
   }
 
+  public int getId2() {
+    return this.id2;
+  }
+
 }

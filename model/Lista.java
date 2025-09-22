@@ -1,23 +1,24 @@
 package model;
+import aeds3.Entidade;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import aeds3.Entidade;
+import nanoid.NanoId;
 
 public class Lista implements Entidade{
-    //boolean ativo;
+    
     private int id; //4 bytes
     private String nome; //20 bytes
     private String descricao; //30 bytes
     private LocalDate criacao;//24 bytes
     private LocalDate limite;//24 bytes
     private String codigo;//10 bytes
-//Chave estrangeira
+    //Chave estrangeira
     private int idUsuario;//4 bytes
+    //boolean ativo;
     private boolean ativo;// 1 byte
 
     public Lista(){
@@ -27,6 +28,7 @@ public class Lista implements Entidade{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate data = LocalDate.of(1970, 1, 1);
         String tmp = data.format(formatter);
+        this.criacao = data;
         this.limite= LocalDate.parse(tmp,formatter);
         this.codigo="";
         this.idUsuario=-1;
@@ -38,6 +40,7 @@ public class Lista implements Entidade{
         this.id=id;
         this.nome=nome;
         this.descricao=descricao;
+        this.criacao=criacao;
         this.limite=limite;
         this.codigo=codigo;
         this.idUsuario=idUsuario;
@@ -55,9 +58,11 @@ public class Lista implements Entidade{
     }
 
     public String getCodigo() {
-        return codigo;
-    }public void setCodigo(String codigo) {
-        this.codigo = codigo;
+        return this.codigo;
+    }
+
+    public void setCodigo() {
+        this.codigo = NanoId.generate(10);
     }
 
     public LocalDate getCriacao() {
@@ -72,7 +77,13 @@ public class Lista implements Entidade{
         this.descricao = descricao;
     }
 
-    
+    public int getUID() {
+        return this.idUsuario;
+    }
+
+    public void setUID(int uid) {
+        this.idUsuario = uid;
+    }
 
     public String getNome() {
         return nome;
@@ -86,33 +97,43 @@ public class Lista implements Entidade{
         this.limite = limite;
     }
 
-   public byte[] toByteArray() throws Exception {
+   public byte[] toByteArray() throws Exception { // --> ALTERADO POR FABIANO
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-        dos.writeBoolean(this.ativo);
         dos.writeInt(this.id);
         dos.writeUTF(this.nome);
         dos.writeUTF(this.descricao);
         dos.writeInt((int)this.criacao.toEpochDay());
         dos.writeInt((int)this.limite.toEpochDay());
-        dos.writeUTF(this.codigo);
+        dos.write(this.codigo.getBytes()); 
+        dos.writeInt(this.idUsuario);
         dos.writeBoolean(this.ativo);
         return baos.toByteArray();
     }
 
-    public void fromByteArray(byte[] vb) throws Exception {
+    public void fromByteArray(byte[] vb) throws Exception { // --> ALTERADO POR FABIANO
         ByteArrayInputStream bais = new ByteArrayInputStream(vb);
         DataInputStream dis = new DataInputStream(bais);
+        byte[] codigo = new byte[10];
         this.id = dis.readInt();
         this.nome = dis.readUTF();
         this.descricao = dis.readUTF();
         this.criacao = LocalDate.ofEpochDay(dis.readInt());
         this.limite = LocalDate.ofEpochDay(dis.readInt());
-        this.codigo = dis.readUTF();
+        dis.read(codigo);
+        this.codigo = new String(codigo);
+        this.idUsuario = dis.readInt();
         this.ativo = dis.readBoolean();
     }
 
-    
+    @Override
+    public String toString() {
+        return "\nCÓDIGO: " + this.codigo +
+                "\nNOME: " + this.nome +
+                "\nDESCRIÇÃO: " + this.descricao +
+                "\nDATA DE CRIAÇÃO: " + this.criacao +
+                "\nDATA LIMITE: " + this.limite;
+    }
 
 
     // @Override

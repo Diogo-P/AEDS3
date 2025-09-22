@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 import model.*;
 
@@ -5,12 +6,11 @@ public class Principal {
 
     private final ArquivoUsuario arq;
 
-    
-        public Principal()throws Exception{
-            this.arq = new ArquivoUsuario();
-        }
+    public Principal() throws Exception {
+        this.arq = new ArquivoUsuario();
+    }
 
-    public static Usuario telaLogin(ArquivoUsuario arqUsuarios)throws Exception{
+    public static Usuario telaLogin(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Email: ");
         String emailLogin = sc.nextLine().trim();
@@ -28,14 +28,14 @@ public class Principal {
                 return null;
             }
         } else {
-                System.out.println("\nUsuário não encontrado ou inativo!");
-                return null;
+            System.out.println("\nUsuário não encontrado ou inativo!");
+            return null;
         }
-       
+
         return usuarioLogin;
     }
-    
-    public static Usuario telaCadastro(){
+
+    public static Usuario telaCadastro() {
         String nome;
         String email;
         String senha;
@@ -56,11 +56,11 @@ public class Principal {
         resposta = sc.nextLine().trim();
 
         Usuario novoUsuario = new Usuario(nome, email, senha, pergunta, resposta, true);
-       
+
         return novoUsuario;
     }
 
-    public static void telaAtualizar(ArquivoUsuario arqUsuarios)throws Exception{
+    public static void telaAtualizar(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Email do usuário a atualizar: ");
         String emailAtualizar = sc.nextLine().trim();
@@ -98,10 +98,10 @@ public class Principal {
             }
         } else {
             System.out.println("Usuário não encontrado ou inativo.");
-        }               
+        }
     }
 
-    public static void telaExcluir(ArquivoUsuario arqUsuarios)throws Exception{
+    public static void telaExcluir(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Email do usuário a excluir: ");
         String emailExcluir = sc.nextLine().trim();
@@ -118,9 +118,7 @@ public class Principal {
         }
     }
 
-    
-
-    public static void telaRecuperar(ArquivoUsuario arqUsuarios)throws Exception{
+    public static void telaRecuperar(ArquivoUsuario arqUsuarios) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.print("Digite o email: ");
         String emailRecuperar = sc.nextLine().trim();
@@ -149,16 +147,11 @@ public class Principal {
         }
     }
 
-   
-
-
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
         ArquivoUsuario arqUsuarios;
 
-
-       
         try {
             arqUsuarios = new ArquivoUsuario();
         } catch (Exception e) {
@@ -177,7 +170,7 @@ public class Principal {
             System.out.println("(2) Novo usuário");
             System.out.println("(3) Atualizar usuário");
             System.out.println("(4) Excluir usuário");
-           // System.out.println("(5) Listar usuários");
+            // System.out.println("(5) Listar usuários");
             System.out.println("(5) Recuperar senha");
             System.out.println("(S) Sair");
             System.out.print("\nOpção: ");
@@ -187,17 +180,17 @@ public class Principal {
             try {
                 switch (opcao.toUpperCase()) {
 
-//Login
+// Login
                     case "1": // Login
                         Usuario usuario = telaLogin(arqUsuarios);
-                        if(usuario!=null){
+                        if (usuario != null) {
                             MenuUsuario menu = new MenuUsuario(usuario.getID());
                             menu.telaMenuUsuario();
                         }
-                         break;
-                         
+                        break;
 
-                         /* 
+
+                    /* 
                         System.out.print("Email: ");
                         String emailLogin = sc.nextLine().trim();
                         System.out.print("Senha: ");
@@ -216,11 +209,10 @@ public class Principal {
                             System.out.println("\nUsuário não encontrado ou inativo!");
                          }
                         break;
-                        */
-
-//Cadastro
-                    case "2": // Novo usuário
-                        Usuario novoUsuario  = telaCadastro();
+                     */
+// Cadastro
+                    case "2": // Cadastro / Novo Usuário
+                        Usuario novoUsuario = telaCadastro();
                         // System.out.print("Nome: ");
                         // String nome = sc.nextLine().trim();
                         // System.out.print("Email: ");
@@ -249,25 +241,21 @@ public class Principal {
                         //     if (!novoNome.isEmpty()) {
                         //         usuarioAtual.setNome(novoNome);
                         //     }
-
                         //     System.out.print("Nova senha (enter para manter): ");
                         //     String novaSenha = sc.nextLine().trim();
                         //     if (!novaSenha.isEmpty()) {
                         //         usuarioAtual.setHashSenha(HashUtil.gerarHash(novaSenha));
                         //     }
-
                         //     System.out.print("Nova pergunta secreta (enter para manter): ");
                         //     String novaPergunta = sc.nextLine().trim();
                         //     if (!novaPergunta.isEmpty()) {
                         //         usuarioAtual.setPerguntaSecreta(novaPergunta);
                         //     }
-
                         //     System.out.print("Nova resposta secreta (enter para manter): ");
                         //     String novaResposta = sc.nextLine().trim();
                         //     if (!novaResposta.isEmpty()) {
                         //         usuarioAtual.setRespostaSecreta(novaResposta);
                         //     }
-
                         //     if (arqUsuarios.update(usuarioAtual)) {
                         //         System.out.println("\nUsuário atualizado com sucesso!");
                         //     } else {
@@ -296,9 +284,6 @@ public class Principal {
                         // }
                         break;
 
-
-
-                   
 //Recuperar senha
                     case "5": // Recuperar senha
                         telaRecuperar(arqUsuarios);
@@ -310,12 +295,10 @@ public class Principal {
                         //     System.out.println("Pergunta secreta: " + usuarioRec.getPerguntaSecreta());
                         //     System.out.print("Resposta: ");
                         //     String respostaDigitada = sc.nextLine().trim();
-
                         //     if (usuarioRec.getRespostaSecreta().equalsIgnoreCase(respostaDigitada)) {
                         //         System.out.print("Digite a nova senha: ");
                         //         String novaSenhaRec = sc.nextLine().trim();
                         //         usuarioRec.setHashSenha(HashUtil.gerarHash(novaSenhaRec));
-
                         //         if (arqUsuarios.update(usuarioRec)) {
                         //             System.out.println("\nSenha redefinida com sucesso!");
                         //         } else {
@@ -340,7 +323,7 @@ public class Principal {
                         break;
                 }
             } catch (Exception e) {
-                System.out.println("Ocorreu um erro: " + e.getMessage());
+                System.out.println("Ocorreu um erro dentro do menu de operações: " + e.getMessage());
             }
         }
 
