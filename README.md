@@ -2,7 +2,9 @@ Relatório:
 
 Integrantes do grupo:
 Fabiano Queiroz Guimarães Almeida
-
+Mateus Evangelista do Nascimento
+Fernando Theodoro Porto de Paula Dias
+Diogo Patrick Cesário de Oliveira
 
 
 O nosso programa funciona da seguinte forma:
