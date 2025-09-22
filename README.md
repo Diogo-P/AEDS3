@@ -29,20 +29,37 @@ de uma lista.
 
 
 Há um CRUD de usuários (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente? 
+
 Sim
+
 Há um CRUD de listas (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
+
 Sim
+
 As listas de presentes estão vinculadas aos usuários usando o idUsuario como chave estrangeira?
+
 Sim
+
 Há uma árvore B+ que registre o relacionamento 1:N entre usuários e listas?
+
 Sim
+
 Há um CRUD de usuários (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade)?
+
 Sim
+
 Há uma visualização das listas de outras pessoas por meio de um código NanoID?
+
 Sim
+
 O trabalho compila corretamente?
+
 Sim
+
 O trabalho está completo e funcionando sem erros de execução?
+
 Sim
+
 O trabalho é original e não a cópia de um trabalho de outro grupo?
+
 Sim
