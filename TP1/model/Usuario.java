@@ -20,8 +20,14 @@ public class Usuario implements Entidade {
         this(-1, "", "", "", "", "", true);
     }
 
-    public Usuario(String nome, String email, String hashSenha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
-        this(-1, nome, email, hashSenha, perguntaSecreta, respostaSecreta, ativo);
+    public Usuario(String nome, String email, String senha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
+        this.id = -1;
+        this.nome = nome;
+        this.email = email;
+        this.hashSenha = HashUtil.gerarHash(senha); 
+        this.perguntaSecreta = perguntaSecreta;
+        this.respostaSecreta = respostaSecreta;
+        this.ativo = ativo;
     }
 
     public Usuario(int id, String nome, String email, String senha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
