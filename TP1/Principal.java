@@ -108,9 +108,9 @@ public class Principal {
         System.out.print("Senha do usuário a excluir: ");
         String senhaExcluir = (sc.nextLine().trim());
 
-        Usuario usuarioExcluir = arqUsuarios.readEmail(emailExcluir) ;
+        Usuario usuarioExcluir = arqUsuarios.readEmail(emailExcluir);
 
-        if (usuarioExcluir != null && usuarioExcluir.getAtivo()&& (HashUtil.gerarHash(senhaExcluir)).equals(usuarioExcluir.getHashSenha())) {
+        if (usuarioExcluir != null && usuarioExcluir.getAtivo() && (HashUtil.gerarHash(senhaExcluir)).equals(usuarioExcluir.getHashSenha())) {
             if (arqUsuarios.delete(usuarioExcluir.getID())) {
                 System.out.println("\nUsuário excluído com sucesso!");
             } else {
