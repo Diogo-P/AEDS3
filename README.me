@@ -10,11 +10,58 @@ Fernando Theodoro Porto de Paula Dias
 
 Diogo Patrick Cesário de Oliveira
 
+Relatório TP2:
+
+O nosso programa funciona da seguinte forma: A classe Principal é responsável pelas operações do menu principal, de um usuário deslogado. O metódo main inicializa um objeto ArquivoUsuario arqUsuarios para lidar com operações de CRUD de usuário. A partir disso é declarado um boolean running que indica a execução das operações de menu de um usuário logado ou da tela principal (login e CRUD de usuário). Após isso temos um menu que é capaz de fazer as seguintes operações: Abrir CRUD de dados do usuario (Consultar, atualizar e deletar), Consultar e interagir com listas do próprio usuário, fazer estas mesmas operações com produtos  e além disso buscar lista de outros usuários.
+
+Com destaque nas operações novas adicionadas nesse TP2: Ao selecionar nesse menu inicial de um usuário logado a tela produtos, podemos ter uma série de opções: Consultar produtos (Listar e procurar por nome ou GTIN-13) e Cadastrar produtos. Ao ser encontrado um produto e este selecionado, o método telaProdutoSelecionadoPeloMenu será ativado, e assim operações de atualização, consulta ou inativação poderão ser feitas com esse produto. Na visão de produtos dentro de uma lista, ao ser selecionado, o método telaProdutoSelecionadoPelaLista será chamada e com isso se existir uma relação de ListaProduto com esse produto a lista será aberto um menu especial para atualizar, excluir ou visualizar essa relação. Diferente disso, caso não exista uma relação ListaProduto, as operações existentes serão apenas de criar uma relação entre esse produto e essa lista.
+
+Além disso, para visualizar produtos listados por busca de nome ou simplesmente listados pelo critério de existência, ou por visão de lista, foi criado um sistema de paginação que permite o usuário a ver todos produtos de uma certa página caso a quantidade de produtos seja muito extensa.
+
+Checklist:
+
+Há um CRUD de produtos (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
+
+Sim
+
+Há um CRUD da entidade de associação ListaProduto (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
+
+Sim
+
+A visão de produtos está corretamente implementada e permite consultas as listas em que o produto aparece (apenas quantidade no caso de lista de outras pessoas)?
+
+Sim
+
+A visão de listas funciona corretamente e permite a gestão dos produtos na lista?
+
+Sim
+
+A integridade do relacionamento entre listas e produtos está mantida em todas as operações?
+
+Sim
+
+O trabalho compila corretamente?
+
+Sim
+
+O trabalho está completo e funcionando sem erros de execução?
+
+Sim
+
+O trabalho é original e não a cópia de um trabalho de outro grupo?
+
+Sim
+
+
+Relatório TP1:
+
 O nosso programa funciona da seguinte forma: A classe Principal é responsável pelas operações do menu principal, de um usuário deslogado. O metódo main inicializa um objeto ArquivoUsuario arqUsuarios para lidar com operações de CRUD de usuário. A partir disso é declarado um boolean running que indica a execução das operações de menu de um usuário logado ou da tela principal (login e CRUD de usuário). Após isso temos um switch case que, dependendo do input do usuário, chama um desses metódos: (telaLogin telaCadastro telaAtualizar telaExcluir telaRecuperar) para realizar uma das operações de CRUD de usuário, recuperar senha ou sair do programa. Essas operações de usuário chamam a classe ArquivoUsuario que realiza o crud chamando a classe pai Arquivo e manipulando corretamente todos os índices diretos e indiretos dos arquivos de HashExtensível e ArvoreBMais.
 
 Suponhamos que um usuário criou com sucesso sua conta e logou corretamente com seus dados. A partir daí o programa irá chamar o metódo telaMenuUsuario do MenuUsuario para realizar prints de tela de menu de usuário logado. Essa tela imprimirá todas as listas do usuário e apresenta opções previstas no código. Para criar uma lista basta fornecer os dados exigidos e a lista será criada. Para consultar, atualizar ou apagar uma lista basta selecionar a operação e depois selecionar o index da lista correspondente a sua ordem alfabética dentre todas as listas.
 
 Voltando nas operações de menu de usuário, essas operações que correspondem ao CRUD de listas chamam a classe ArquivoUsuario que realiza o crud chamando a classe pai Arquivo e manipulando corretamente todos os índices diretos e indiretos dos arquivos de HashExtensível e ArvoreBMais. As listas são criadas setando sua chave estrangeira id que é mandanda como parâmetro quando o MenuUsuario é chamado dentro da Principal. Elas também são criadas setando seu código compartilhável de 10 caracteres a partir da classe NanoId dentro do package nanoid, gerando automaticamente o código imutável de uma lista.
+
+Checklist:
 
 Há um CRUD de usuários (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
 
