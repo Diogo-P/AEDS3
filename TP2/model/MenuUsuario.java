@@ -189,7 +189,7 @@ public class MenuUsuario {
 
                         ListaProduto lp = new ListaProduto(lista.getID(), produto.getID(), qtd, obs);
                         int id = arquivoListaProduto.create(lp);
-                        System.out.println("Produto adicionado à lista! Associação ID = " + id);
+                        System.out.println("Produto adicionado à lista!");
                         runningSelecionado = false;
                         break;
                     case "S":
@@ -1096,10 +1096,6 @@ public class MenuUsuario {
             //System.out.println("(3) Buscar produto por ID");
             System.out.println("(G) Buscar produto por GTIN-13");
             System.out.println("(N) Buscar produtos por nome");
-
-            System.out.println("(A) Atualizar produto");
-            System.out.println("(I) Excluir produto");
-
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
@@ -1118,7 +1114,7 @@ public class MenuUsuario {
 
                     Produto p = new Produto(gtin, nome, descricao, false);
                     int id = arqProduto.create(p);
-                    System.out.println("Produto cadastrado com sucesso! ID: " + id); }
+                    System.out.println("Produto cadastrado com sucesso!"); }
                     break;
                 case "L": {
                     listarProdutosPeloMenu(); }
