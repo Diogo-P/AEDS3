@@ -2,6 +2,8 @@ package model;
 
 import aeds3.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class ArquivoProduto extends Arquivo<Produto> {
 
@@ -40,6 +42,76 @@ public class ArquivoProduto extends Arquivo<Produto> {
         return super.read(id);
     }
 
+    public Produto readId(int id) throws Exception {
+        return super.read(id);
+    }
+
+    public Produto[] listProdutosInativados() throws Exception {
+        Produto p = new Produto();
+        ArrayList<Produto> produtoList = new ArrayList<>();
+
+        int id = 1;
+        while (p != null) {
+            p = super.read(id);
+            if ( p != null ) {
+                produtoList.add(p);
+            }
+            id++;
+        }
+
+        Produto[] produtosDoSistema = new Produto[produtoList.size()]; 
+        
+        int i = 0;
+        for ( Produto valor : produtoList ) {
+            produtosDoSistema[i++] = valor;
+        }
+
+        Arrays.sort(
+            produtosDoSistema,
+            Comparator.nullsLast( // se o objeto Lista for null, manda pro final
+                Comparator.comparing(
+                    Produto::getNome,
+                    Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER) // se o nome for null, fica no início
+                )
+            )
+        );
+
+        return produtosDoSistema;
+    }
+
+    public Produto[] listProdutos() throws Exception {
+        Produto p = new Produto();
+        ArrayList<Produto> produtoList = new ArrayList<>();
+
+        int id = 1;
+        while (p != null) {
+            p = super.read(id);
+            if ( p != null && p.getInativo() == false ) {
+                produtoList.add(p);
+            }
+            id++;
+        }
+
+        Produto[] produtosDoSistema = new Produto[produtoList.size()]; 
+        
+        int i = 0;
+        for ( Produto valor : produtoList ) {
+            produtosDoSistema[i++] = valor;
+        }
+
+        Arrays.sort(
+            produtosDoSistema,
+            Comparator.nullsLast( // se o objeto Lista for null, manda pro final
+                Comparator.comparing(
+                    Produto::getNome,
+                    Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER) // se o nome for null, fica no início
+                )
+            )
+        );
+
+        return produtosDoSistema;
+    }
+
     public Produto[] readNome(String nome) throws Exception {
         ArrayList<ParNomeId> pnis = indiceIndiretoNome.read(new ParNomeId(nome, -1));
         Produto[] produtos = new Produto[pnis.size()];
@@ -49,8 +121,6 @@ public class ArquivoProduto extends Arquivo<Produto> {
         }
         return produtos;
     }
-
-    
 
     public boolean update(Produto novoProduto) throws Exception {
         Produto produtoAntigo = super.read(novoProduto.getID());
@@ -72,6 +142,7 @@ public class ArquivoProduto extends Arquivo<Produto> {
         }
     }
 
+    /* METODO QUE NAO DEVE SER USADO MAS NÃO DELETAR O COMENTÁRIO
     @Override
     public boolean delete(int id) throws Exception {
         Produto produto = super.read(id);
@@ -87,4 +158,5 @@ public class ArquivoProduto extends Arquivo<Produto> {
             return false;
         }
     }
+    */
 }

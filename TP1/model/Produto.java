@@ -12,21 +12,23 @@ public class Produto implements Entidade {
     private String gtin13;
     private String nome;
     private String descricao;
+    private boolean inativo;
 
     // Construtores
     public Produto() {
-        this(-1, "", "", "");
+        this(-1, "", "", "", false);
     }
 
-    public Produto(String gtin13, String nome, String descricao) {
-        this(-1, gtin13, nome, descricao);
+    public Produto(String gtin13, String nome, String descricao, boolean inativo) {
+        this(-1, gtin13, nome, descricao, inativo);
     }
 
-    public Produto(int id, String gtin13, String nome, String descricao) {
+    public Produto(int id, String gtin13, String nome, String descricao, boolean inativo) {
         this.id = id;
         this.gtin13 = gtin13;
         this.nome = nome;
         this.descricao = descricao;
+        this.inativo = inativo;
     }
 
     // Implementação da interface Entidade
@@ -41,6 +43,14 @@ public class Produto implements Entidade {
     }
 
     // Getters e Setters
+    public boolean getInativo() {
+        return this.inativo;
+    }
+
+    public void setInativo(boolean inativo) {
+        this.inativo = inativo;
+    }
+
     public String getGtin13() {
         return gtin13;
     }
@@ -73,6 +83,7 @@ public class Produto implements Entidade {
         dos.writeUTF(this.gtin13);
         dos.writeUTF(this.nome);
         dos.writeUTF(this.descricao);
+        dos.writeBoolean(this.inativo);
         return baos.toByteArray();
     }
 
@@ -83,12 +94,15 @@ public class Produto implements Entidade {
         this.gtin13 = dis.readUTF();
         this.nome = dis.readUTF();
         this.descricao = dis.readUTF();
+        this.inativo = dis.readBoolean();
     }
 
     // Exibição textual
     @Override
     public String toString() {
+        String status = this.inativo ? "Não" : "Sim";
         return "\nID..............: " + this.id
+             + "\nATIVADO: " + status
              + "\nGTIN-13.........: " + this.gtin13
              + "\nNome............: " + this.nome
              + "\nDescrição.......: " + this.descricao;

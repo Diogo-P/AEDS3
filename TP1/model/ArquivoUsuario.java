@@ -37,6 +37,10 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
         return id;
     }
 
+    public Usuario readId(int id) throws Exception {
+        return super.read(id);
+    }
+
     public Usuario readEmail(String email) throws Exception {
         ParEmailID pei = indiceIndiretoEmail.read(ParEmailID.hash(email));
         if (pei == null)

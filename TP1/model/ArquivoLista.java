@@ -141,13 +141,13 @@ public class ArquivoLista extends Arquivo<Lista> {
             i++;
         }
         Arrays.sort(
-                listasDoUsuario,
-                Comparator.nullsLast( // se o objeto Lista for null, manda pro final
-                        Comparator.comparing(
-                                Lista::getNome,
-                                Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER) // se o nome for null, fica no início
-                        )
+            listasDoUsuario,
+            Comparator.nullsLast( // se o objeto Lista for null, manda pro final
+                Comparator.comparing(
+                    Lista::getNome,
+                    Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER) // se o nome for null, fica no início
                 )
+            )
         );
 
         return listasDoUsuario;

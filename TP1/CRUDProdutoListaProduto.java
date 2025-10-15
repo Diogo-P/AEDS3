@@ -58,7 +58,7 @@ public class CRUDProdutoListaProduto {
         System.out.print("GTIN-13: ");
         String gtin = sc.nextLine();
 
-        Produto p = new Produto(nome, desc, gtin);
+        Produto p = new Produto(nome, desc, gtin, false);
         int id = arqProduto.create(p);
         System.out.println("Produto criado com sucesso! ID = " + id);
     }
