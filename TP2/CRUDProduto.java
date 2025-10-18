@@ -37,7 +37,7 @@ public class CRUDProduto {
                         lerProdutoPorID(sc, arqProduto);
                         break;
                     case 3:
-                        lerProdutoPorGtin(sc, arqProduto);
+                        lerProdutoPorGtin(arqProduto);
                         break;
                     case 4:
                         lerProdutoPorNome(sc, arqProduto);
@@ -65,15 +65,32 @@ public class CRUDProduto {
 
     // ======== CRUD MÉTODOS ========
 
+    private static String gerarGtin13() {
+        StringBuilder gtin = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            gtin.append((int)(Math.random() * 10));
+        }
+        
+        int sum = 0;
+        for (int i = 0; i < 12; i++) {
+            int digit = gtin.charAt(i) - '0';
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+        int checkDigit = (10 - (sum % 10)) % 10;
+        gtin.append(checkDigit);
+        
+        return gtin.toString();
+    }
+
     private static void criarProduto(Scanner sc, ArquivoProduto arqProduto) throws Exception {
-        System.out.print("GTIN-13: ");
-        String gtin = sc.nextLine();
+        String gtin = gerarGtin13();
+        System.out.println("GTIN-13 gerado: " + gtin);
         System.out.print("Nome: ");
         String nome = sc.nextLine();
         System.out.print("Descrição: ");
         String descricao = sc.nextLine();
 
-        Produto p = new Produto(gtin, nome, descricao);
+        Produto p = new Produto(gtin, nome, descricao, false);
         int id = arqProduto.create(p);
         System.out.println("✅ Produto cadastrado com sucesso! ID: " + id);
     }
@@ -88,9 +105,10 @@ public class CRUDProduto {
             System.out.println("❌ Produto não encontrado.");
     }
 
-    private static void lerProdutoPorGtin(Scanner sc, ArquivoProduto arqProduto) throws Exception {
-        System.out.print("GTIN-13: ");
-        String gtin = sc.nextLine();
+    private static void lerProdutoPorGtin(ArquivoProduto arqProduto) throws Exception {
+        String gtin = gerarGtin13();
+        
+        System.out.println("Código GTIN-13 gerado: " + gtin);
         Produto p = arqProduto.readGtin(gtin);
         if (p != null)
             System.out.println(p);
@@ -125,9 +143,7 @@ public class CRUDProduto {
         System.out.println("Produto atual:");
         System.out.println(p);
 
-        System.out.print("Novo GTIN-13 (atual: " + p.getGtin13() + "): ");
-        String novoGtin = sc.nextLine();
-        if (!novoGtin.trim().isEmpty()) p.setGtin13(novoGtin);
+        
 
         System.out.print("Novo nome (atual: " + p.getNome() + "): ");
         String novoNome = sc.nextLine();

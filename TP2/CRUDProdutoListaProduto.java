@@ -7,6 +7,23 @@ public class CRUDProdutoListaProduto {
     private static ArquivoListaProduto arqListaProduto;
     private static Scanner sc = new Scanner(System.in);
 
+    private static String gerarGtin13() {
+        StringBuilder gtin = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            gtin.append((int)(Math.random() * 10));
+        }
+        
+        int sum = 0;
+        for (int i = 0; i < 12; i++) {
+            int digit = gtin.charAt(i) - '0';
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+        int checkDigit = (10 - (sum % 10)) % 10;
+        gtin.append(checkDigit);
+        
+        return gtin.toString();
+    }
+
     public static void main(String[] args) {
         try {
             arqProduto = new ArquivoProduto();
@@ -55,10 +72,10 @@ public class CRUDProdutoListaProduto {
         String nome = sc.nextLine();
         System.out.print("Descrição: ");
         String desc = sc.nextLine();
-        System.out.print("GTIN-13: ");
-        String gtin = sc.nextLine();
+        String gtin = gerarGtin13();
+        System.out.println("GTIN-13 gerado: " + gtin);
 
-        Produto p = new Produto(nome, desc, gtin, false);
+        Produto p = new Produto(gtin, nome, desc, false);
         int id = arqProduto.create(p);
         System.out.println("Produto criado com sucesso! ID = " + id);
     }

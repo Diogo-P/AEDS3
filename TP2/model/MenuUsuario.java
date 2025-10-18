@@ -16,6 +16,23 @@ public class MenuUsuario {
 
     Scanner sc = new Scanner(System.in);
 
+    private static String gerarGtin13() {
+        StringBuilder gtin = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            gtin.append((int)(Math.random() * 10));
+        }
+        
+        int sum = 0;
+        for (int i = 0; i < 12; i++) {
+            int digit = gtin.charAt(i) - '0';
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+        int checkDigit = (10 - (sum % 10)) % 10;
+        gtin.append(checkDigit);
+        
+        return gtin.toString();
+    }
+
     public MenuUsuario(int id) throws Exception {
         this.id = id;
         arquivoUsuario = new ArquivoUsuario();
@@ -1105,12 +1122,13 @@ public class MenuUsuario {
 
             switch (op) {
                 case "C": {
-                    System.out.println("GTIN-13: ");
-                    String gtin = sc.nextLine();
                     System.out.println("Nome: ");
                     String nome = sc.nextLine();
                     System.out.println("Descrição: ");
                     String descricao = sc.nextLine();
+                    String gtin = gerarGtin13();
+                    System.out.println("GTIN-13 gerado: " + gtin);
+                   
 
                     Produto p = new Produto(gtin, nome, descricao, false);
                     int id = arqProduto.create(p);

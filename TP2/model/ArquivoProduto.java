@@ -9,6 +9,8 @@ public class ArquivoProduto extends Arquivo<Produto> {
 
     private HashExtensivel<ParGtinID> indiceIndiretoGtin;
     private ArvoreBMais<ParNomeId> indiceIndiretoNome;
+    // para ver se tem aquele aviso do index 
+    private static final boolean GTIN_INDEX_VERBOSE = false;
 
     public ArquivoProduto() throws Exception {
         super("produto", Produto.class.getConstructor());
@@ -29,17 +31,42 @@ public class ArquivoProduto extends Arquivo<Produto> {
 
     public int create(Produto produto) throws Exception {
         int id = super.create(produto);
-        indiceIndiretoGtin.create(new ParGtinID(produto.getGtin13(), id));
+        try {
+            indiceIndiretoGtin.create(new ParGtinID(produto.getGtin13(), id));
+        } catch (Exception e) {
+            // Aviso para possivel erro
+            if (GTIN_INDEX_VERBOSE) {
+                System.err.println("Warning: GTIN index insertion failed for GTIN='" + produto.getGtin13() + "' ID=" + id + " -> " + e.getMessage());
+            }
+        }
         indiceIndiretoNome.create(new ParNomeId(produto.getNome(), id));
         return id;
     }
 
     public Produto readGtin(String gtin13) throws Exception {
+        // Tentar primeiro a pesquisa por índice (caminho rápido)
         ParGtinID pgi = indiceIndiretoGtin.read(ParGtinID.hash(gtin13));
-        if (pgi == null)
-            return null;
-        int id = pgi.getID();
-        return super.read(id);
+        if (pgi != null) {
+            int id = pgi.getID();
+            return super.read(id);
+        }
+
+       // Alternativa (Fallback):índice não encontrado (possível se o índice foi construído com normalização diferente ou está corrompido)
+    // Realizar uma varredura linear comparando GTINs normalizados (somente dígitos)
+        String target = gtin13 == null ? "" : gtin13.replaceAll("\\D+", "");
+        Produto p = null;
+        int id = 1;
+        while (true) {
+            p = super.read(id);
+            if (p == null) break;
+            String pgtin = p.getGtin13() == null ? "" : p.getGtin13().replaceAll("\\D+", "");
+            if (!pgtin.isEmpty() && pgtin.equals(target)) {
+                return p;
+            }
+            id++;
+        }
+
+        return null;
     }
 
     public Produto readId(int id) throws Exception {
@@ -129,8 +156,16 @@ public class ArquivoProduto extends Arquivo<Produto> {
 
         if (super.update(novoProduto)) {
             if (!novoProduto.getGtin13().equals(gtinAntigo)) {
-                indiceIndiretoGtin.delete(ParGtinID.hash(gtinAntigo));
-                indiceIndiretoGtin.create(new ParGtinID(novoProduto.getGtin13(), novoProduto.getID()));
+                try {
+                    indiceIndiretoGtin.delete(ParGtinID.hash(gtinAntigo));
+                } catch (Exception e) {
+                    if (GTIN_INDEX_VERBOSE) System.err.println("Aviso: falha ao excluir o índice GTIN antigo para'" + gtinAntigo + "' -> " + e.getMessage());
+                }
+                try {
+                    indiceIndiretoGtin.create(new ParGtinID(novoProduto.getGtin13(), novoProduto.getID()));
+                } catch (Exception e) {
+                    if (GTIN_INDEX_VERBOSE) System.err.println("Aviso: falha na criação do índice GTIN durante a atualização para GTIN='" + novoProduto.getGtin13() + "' ID=" + novoProduto.getID() + " -> " + e.getMessage());
+                }
             }
             if (!novoProduto.getNome().equals(nomeAntigo)) {
                 indiceIndiretoNome.delete(new ParNomeId(nomeAntigo, novoProduto.getID()));

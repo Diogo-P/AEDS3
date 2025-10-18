@@ -30,7 +30,11 @@ public class ParGtinID implements RegistroHashExtensivel {
     }
 
     public static int hash(String gtin13) {
-        return Math.abs(gtin13.hashCode());
+        if (gtin13 == null) return 0;
+        // Normalizar: remover quaisquer caracteres que não sejam dígitos e "trim" eles
+        String normalized = gtin13.replaceAll("\\D+", "").trim();
+        if (normalized.isEmpty()) return 0;
+        return Math.abs(normalized.hashCode());
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ParGtinID implements RegistroHashExtensivel {
         DataOutputStream dos = new DataOutputStream(baos);
 
         // GTIN-13 sempre tem 13 caracteres, mas usamos campo fixo de 20 bytes
-        StringBuilder sb = new StringBuilder(this.gtin13);
+        StringBuilder sb = new StringBuilder(this.gtin13 == null ? "" : this.gtin13);
         while (sb.length() < 20) sb.append(' ');
         dos.write(sb.toString().getBytes());
 
