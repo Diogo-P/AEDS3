@@ -376,9 +376,7 @@ public class MenuUsuario {
                         System.out.println("Produto atual:");
                         System.out.println(p);
 
-                        System.out.println("Novo GTIN-13 (atual: " + p.getGtin13() + "): ");
-                        String novoGtin = sc.nextLine();
-                        if (!novoGtin.trim().isEmpty()) p.setGtin13(novoGtin);
+                       
 
                         System.out.println("Novo nome (atual: " + p.getNome() + "): ");
                         String novoNome = sc.nextLine();
