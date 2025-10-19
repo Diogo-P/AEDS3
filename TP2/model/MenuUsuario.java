@@ -171,7 +171,6 @@ public class MenuUsuario {
 
         while (runningSelecionado) {
             String op;
-            op = sc.nextLine().toUpperCase();
 
             lista = listaParametro;
 
@@ -196,6 +195,7 @@ public class MenuUsuario {
                 System.out.println("(S) Sair");
                 System.out.println();
                 System.out.print("Opção: ");
+                op = sc.nextLine().trim().toUpperCase();
 
                 switch (op) {
                     case "A":
@@ -228,6 +228,12 @@ public class MenuUsuario {
                 System.out.println("       PresenteFácil 1.0       ");
                 System.out.println("===============================");
                 System.out.println(produto.toString());
+                // Mostrar dados da associação (quantidade e observações)
+                if (listaProduto != null) {
+                    System.out.println("\n-- Dados desta lista --");
+                    System.out.println("Quantidade: " + listaProduto.getQuantidade());
+                    System.out.println("Observações: " + (listaProduto.getObservacoes() != null ? listaProduto.getObservacoes() : ""));
+                }
                 System.out.println("\nO que deseja realizar com a linkagem do produto acima com a lista " + lista.getNome() + "?\n");
                 System.out.println("(A) Alterar linkagem");
                 System.out.println("(R) Excluir linkagem / Remover produto da lista");
@@ -235,6 +241,7 @@ public class MenuUsuario {
                 System.out.println("(S) Sair");
                 System.out.println();
                 System.out.print("Opção: ");
+                op = sc.nextLine().trim().toUpperCase();
 
                 switch (op) {
                     case "A":
@@ -757,15 +764,25 @@ public class MenuUsuario {
             for ( z = 0; z < 10 && z+paginaAtual < produtosLista.length; z++ ) {
                 produtosPagina[z] = produtosLista[paginaAtual+z];
             }
-            z = 1;
-            for ( Produto produto : produtosPagina ) {
+            
+            for ( int i = 0; i < 10 && i+paginaAtual < produtosLista.length; i++ ) {
+                Produto produto = produtosPagina[i];
                 if ( produto != null ) {
-                    System.out.print("["+ z +"]" + produto.getNome());
+                    System.out.print("[" + (i+1) + "] " + produto.getNome());
                     if ( produto.getInativo() == true ) {
                         System.out.print(" ( INATIVADO )");
                     }
+                    // associação correspondente
+                    if ( produtosRelacionados != null && paginaAtual + i < produtosRelacionados.length ) {
+                        ListaProduto assoc = produtosRelacionados[paginaAtual + i];
+                        if ( assoc != null ) {
+                            System.out.print(" | Qtd: " + assoc.getQuantidade());
+                            if ( assoc.getObservacoes() != null && !assoc.getObservacoes().isBlank() ) {
+                                System.out.print(" | Obs: " + assoc.getObservacoes());
+                            }
+                        }
+                    }
                     System.out.println();
-                    z++;
                 }
             }
             System.out.println();
@@ -939,6 +956,16 @@ public class MenuUsuario {
 
             String op;
 
+            // Cabeçalho
+            System.out.println("\n> Início > Listas");
+            System.out.println("\n===============================");
+            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("===============================");
+
+            // Listagem das listas do usuário 
+            System.out.println();
+            System.out.println("Listas:");
+            System.out.println("-------------------------------");
             int y = 0;
             int n = 0;
             while (y < usuarioListas.length) {
@@ -948,15 +975,7 @@ public class MenuUsuario {
                 }
                 y++;
             }
-
-            //[1]
-            //[2]
-            //[3]
-
-            System.out.println("\n> Início > Listas");
-            System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
-            System.out.println("===============================");
+            System.out.println("-------------------------------");
             System.out.println("(L) Selecionar lista para gerenciar");
             System.out.println("(C) Criar lista");
             System.out.println();
@@ -1021,7 +1040,9 @@ public class MenuUsuario {
             System.out.println("===============================");
             System.out.println();
 
-            Produto[] produtosPagina = new Produto[10];
+                System.out.println();
+
+                Produto[] produtosPagina = new Produto[10];
             for ( int z = 0; z < 10 && z+paginaAtual < produtos.length; z++ ) {
                 produtosPagina[z] = produtos[paginaAtual+z];
             }
@@ -1037,6 +1058,8 @@ public class MenuUsuario {
                 }
             }
             System.out.println();
+            System.out.println("-------------------------------");
+
 
             int paginaAtualTela = paginaAtual/10+1;
             int paginaMaxima = produtos.length/10+1;
