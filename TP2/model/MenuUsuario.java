@@ -321,8 +321,9 @@ public class MenuUsuario {
                 ListaProduto[] listas = arquivoListaProduto.readPorProduto(produtoAtual.getID());
                 ArrayList<Lista> minhasListasList = new ArrayList<>();
                 for ( int z = 0; z < listas.length; z++ ) {
-                    if ( arquivoLista.read(listas[z].getIdLista()).getUID() == id ) {
-                        minhasListasList.add(arquivoLista.read(listas[z].getIdLista()));
+                    Lista poss = arquivoLista.read(listas[z].getIdLista());
+                    if ( poss != null && poss.getUID() == id ) {
+                        minhasListasList.add(poss);
                     }
                 }
                 Lista[] minhasListas = new Lista[minhasListasList.size()];
