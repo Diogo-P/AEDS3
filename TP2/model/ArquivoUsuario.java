@@ -42,11 +42,17 @@ public class ArquivoUsuario extends Arquivo<Usuario> {
     }
 
     public Usuario readEmail(String email) throws Exception {
-        ParEmailID pei = indiceIndiretoEmail.read(ParEmailID.hash(email));
-        if (pei == null)
-            return null;
-        int id = pei.getID();
-        return super.read(id);
+        String norm = (email == null) ? "" : email.trim().toLowerCase();
+        
+        ParEmailID pei = indiceIndiretoEmail.read(ParEmailID.hash(norm));
+        if (pei != null) {
+            Usuario u = super.read(pei.getID());
+            if (u != null) return u;
+        }
+
+        
+
+        return null;
     }
 
     public Usuario[] readNome(String nome) throws Exception {

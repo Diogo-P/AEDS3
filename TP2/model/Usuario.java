@@ -23,7 +23,7 @@ public class Usuario implements Entidade {
     public Usuario(String nome, String email, String senha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
         this.id = -1;
         this.nome = nome;
-        this.email = email;
+        this.email = (email != null) ? email.trim().toLowerCase() : "";
         this.hashSenha = HashUtil.gerarHash(senha); 
         this.perguntaSecreta = perguntaSecreta;
         this.respostaSecreta = respostaSecreta;
@@ -33,7 +33,7 @@ public class Usuario implements Entidade {
     public Usuario(int id, String nome, String email, String senha, String perguntaSecreta, String respostaSecreta, boolean ativo) {
         this.id = id;
         this.nome = nome;
-        this.email = email;
+        this.email = (email != null) ? email.trim().toLowerCase() : "";
         this.hashSenha = HashUtil.gerarHash(senha);
         this.perguntaSecreta = perguntaSecreta;
         this.respostaSecreta = respostaSecreta;
@@ -63,7 +63,7 @@ public class Usuario implements Entidade {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = (email != null) ? email.trim().toLowerCase() : "";
     }
 
     public String getHashSenha() {

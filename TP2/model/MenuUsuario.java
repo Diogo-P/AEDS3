@@ -881,6 +881,9 @@ public class MenuUsuario {
             System.out.println("\n===============================");
             System.out.println("       PresenteFácil 1.0       ");
             System.out.println("===============================");
+            System.out.println("-------------------------------");
+            System.out.println("Lista: " + lista.getNome());
+            System.out.println("-------------------------------");
             System.out.println(lista.toString());
             System.out.println("(P) Gerenciar produtos da lista");
             System.out.println("(U) Alterar dados da lista");
@@ -1351,7 +1354,30 @@ public class MenuUsuario {
                                 System.out.println("Dono da lista: " + dono.getNome());
                             }
                             System.out.println(lista.toString());
+                            
+                            try {
+                                ListaProduto[] relacoes = arquivoListaProduto.readPorLista(lista.getID());
+                                if (relacoes == null || relacoes.length == 0) {
+                                    System.out.println("\nNenhum produto nessa lista.");
+                                } else {
+                                    System.out.println("\nProdutos da lista:");
+                                    int idxp = 1;
+                                    for (ListaProduto lp : relacoes) {
+                                        Produto prod = arqProduto.read(lp.getIdProduto());
+                                        if (prod != null) {
+                                            System.out.println("[" + idxp + "] " + prod.getNome() + " - Quantidade: " + lp.getQuantidade() + " - Observações: " + (lp.getObservacoes() != null ? lp.getObservacoes() : ""));
+                                        } else {
+                                            System.out.println("[" + idxp + "] Produto não encontrado (ID: " + lp.getIdProduto() + ")");
+                                        }
+                                        idxp++;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Erro ao carregar produtos da lista.");
+                            }
 
+                            System.out.println("\nPressione Enter para voltar...");
+                            sc.nextLine();
                         } else {
                             System.out.println("Lista não encontrada.");
                         }

@@ -30,7 +30,9 @@ public class ParEmailID implements RegistroHashExtensivel {
     }
 
     public static int hash(String email) {
-        return Math.abs(email.hashCode());
+        if (email == null) return 0;
+        String norm = email.trim().toLowerCase();
+        return Math.abs(norm.hashCode());
     }
 
     @Override
@@ -60,6 +62,14 @@ public class ParEmailID implements RegistroHashExtensivel {
 
         // Escreve o ID
         dos.writeInt(this.id);
+
+        // Preenche até o tamanho fixo TAMANHO
+        int written = 100 + 4; // email bytes + int
+        int padding = this.TAMANHO - written;
+        if (padding > 0) {
+            byte[] pad = new byte[padding];
+            dos.write(pad);
+        }
 
         return baos.toByteArray();
     }
