@@ -40,6 +40,7 @@ public class MenuUsuario {
         arqProduto = new ArquivoProduto();
         arquivoListaProduto = new ArquivoListaProduto();
         usuarioListas = arquivoLista.carregaListas(id);
+        inicializarBuscador();
     }
 
     //Carregar listas do usuário para memória principal        
@@ -1123,6 +1124,20 @@ public class MenuUsuario {
         }
     }
 
+    private BuscadorProduto buscadorProduto;
+
+    private void inicializarBuscador() throws Exception {
+        if (buscadorProduto == null) {
+            buscadorProduto = new BuscadorProduto("produto.palavras.d.db", "produto.palavras.c.db", arqProduto);
+            
+            // Indexa todos os produtos se ainda não foram indexados
+            Produto[] produtos = arqProduto.listProdutos();
+            for (Produto p : produtos) {
+                buscadorProduto.indexarProduto(p);
+            }
+        }
+    }
+
     public void telaMenuProduto() throws Exception {
         boolean runningMenuProduto = true;
 
@@ -1138,6 +1153,7 @@ public class MenuUsuario {
             //System.out.println("(3) Buscar produto por ID");
             System.out.println("(G) Buscar produto por GTIN-13");
             System.out.println("(N) Buscar produtos por nome");
+            System.out.println("(P) Buscar produtos por palavras");
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
@@ -1154,9 +1170,10 @@ public class MenuUsuario {
                     String gtin = gerarGtin13();
                     System.out.println("GTIN-13 gerado: " + gtin);
                    
-
                     Produto p = new Produto(gtin, nome, descricao, false);
-                    int id = arqProduto.create(p);
+                    int novoId = arqProduto.create(p);
+                    p.setID(novoId);
+                    buscadorProduto.indexarProduto(p);
                     System.out.println("Produto cadastrado com sucesso!"); }
                     break;
                 case "L": {
@@ -1182,7 +1199,7 @@ public class MenuUsuario {
                     else
                         System.out.println("Produto não encontrado."); }
                     break;
-                case "N": {
+               /*  case "N": {
                         System.out.print("Nome: ");
                         String nome = sc.nextLine();
                         Produto[] produtos = arqProduto.readNome(nome);
@@ -1191,6 +1208,22 @@ public class MenuUsuario {
                         } else {
                             System.out.println("Nenhum produto encontrado com esse nome.");
                         } }  
+                    break;
+                    */
+                case "P": {
+                        System.out.print("Digite as palavras para busca: ");
+                        String palavras = sc.nextLine();
+                        try {
+                            Produto[] produtos = buscadorProduto.buscarPorPalavras(palavras);
+                            if (produtos.length > 0) {
+                                System.out.println("\nProdutos encontrados ordenados por relevância:");
+                                telaPaginaDeProdutosNome(produtos);
+                            } else {
+                                System.out.println("Nenhum produto encontrado com essas palavras.");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Erro ao buscar produtos: " + e.getMessage());
+                        } }
                     break;
                 case "S":
                     runningMenuProduto = false;
