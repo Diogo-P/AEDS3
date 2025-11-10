@@ -85,11 +85,11 @@ public class MenuUsuario {
 
             /*
             MenuUsuario menu = new MenuUsuario();
-            //O tamanho do registro é 117 bytes
+            //O tamanho do registro e 117 bytes
             short tam = 117;
-            //É definida a quantidade de registros do arquivo
+            //e definida a quantidade de registros do arquivo
             long regs = arquivoLista.length()/tam;
-            //Lê o nome da lista a ser buscada
+            //Le o nome da lista a ser buscada
             Scanner sc = new Scanner(System.in);
             String nome;
             nome=sc.nextLine();
@@ -111,10 +111,10 @@ public class MenuUsuario {
         }
 
         /* 
-        //Apenas esses 3 dados estarão no input, os outros são automáticos
+        //Apenas esses 3 dados estarao no input, os outros sao automaticos
         System.out.print("Nome: ");
         String nome = sc.nextLine();
-        System.out.print("Descrição: ");
+        System.out.print("Descricao: ");
         String descricao = sc.nextLine();
         System.out.print("Data Limite: ");
         String limite = sc.nextLine();
@@ -124,7 +124,7 @@ public class MenuUsuario {
         String tmp = dataCriacao.format(formatter);
         dataCriacao = LocalDate.parse(tmp,formatter);
         LocalDate dataLimite = LocalDate.parse(limite,formatter);
-        //Cria o objeto e dá sequência ao fluxo
+        //Cria o objeto e da sequencia ao fluxo
         Lista lista =  new Lista(-1,nome,descricao,dataCriacao,dataLimite,"",-1,true);
         // return lista;
         */
@@ -157,13 +157,14 @@ public class MenuUsuario {
 
         if (sucesso) {
             if (!arqLista.deleteIndices(lista)) {
-              //  System.err.println("Erro na remoção dos indices");
+              //  System.err.println("Erro na remocao dos indices");
             }
             System.out.println("Lista removida com sucesso!");
         } else {
-            System.out.println("Lista não encontrada ou já foi excluída.");
+            System.out.println("Lista nao encontrada ou ja foi excluida.");
         }
     }
+
 
     public void telaProdutoSelecionadoPelaLista(Produto produto, ListaProduto listaProduto, int caminho, Lista listaParametro) throws Exception {
         boolean runningSelecionado = true;
@@ -177,9 +178,9 @@ public class MenuUsuario {
 
             if ( listaProduto == null ) { // quando relacao nao existe, ocorre dentro de Procurar por Gtin-13 e Listagem de produtos
                 if ( caminho == 2 && lista != null) {
-                    System.out.println("\n> Início > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Listar produtos > " + produto.getNome());
+                    System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Listar produtos > " + produto.getNome());
                 } else if ( lista != null ) {
-                    System.out.println("\n> Início > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Procurar por GTIN-13 > " + produto.getNome());
+                    System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Procurar por GTIN-13 > " + produto.getNome());
                 } else {
                     System.err.println("Erro ao achar nome da lista selecionada para acrescentar produto");
                     runningSelecionado = false;
@@ -187,7 +188,7 @@ public class MenuUsuario {
                 }
 
                 System.out.println("\n===============================");
-                System.out.println("       PresenteFácil 1.0       ");
+                System.out.println("       PresenteFacil 1.0       ");
                 System.out.println("===============================");
                 System.out.println(produto.toString());
                 System.out.println("\nDeseja adicionar esse produto a lista " + lista.getNome() + "?\n");
@@ -195,18 +196,18 @@ public class MenuUsuario {
                 System.out.println();
                 System.out.println("(S) Sair");
                 System.out.println();
-                System.out.print("Opção: ");
+                System.out.print("Opcao: ");
                 op = sc.nextLine().trim().toUpperCase();
 
                 switch (op) {
                     case "A":
                         System.out.println("Quantidade do produto desejada: ");
                         int qtd = Integer.parseInt(sc.nextLine());
-                        System.out.println("Observações (opcional): ");
+                        System.out.println("Observacoes (opcional): ");
                         String obs = sc.nextLine();
 
-                        ListaProduto lp = new ListaProduto(lista.getID(), produto.getID(), qtd, obs);
-                        int id = arquivoListaProduto.create(lp);
+                        ListaProduto lpCriar = new ListaProduto(lista.getID(), produto.getID(), qtd, obs);
+                        int novoIdRelacao = arquivoListaProduto.create(lpCriar);
                         System.out.println("Produto adicionado à lista!");
                         runningSelecionado = false;
                         break;
@@ -214,7 +215,7 @@ public class MenuUsuario {
                         runningSelecionado = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
 
@@ -224,16 +225,16 @@ public class MenuUsuario {
                     runningSelecionado = false;
                     break;
                 }
-                System.out.println("\n> Início > Listas > " + lista.getNome() + " > Gerenciar produtos > " + produto.getNome());
+                System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > Gerenciar produtos > " + produto.getNome());
                 System.out.println("\n===============================");
-                System.out.println("       PresenteFácil 1.0       ");
+                System.out.println("       PresenteFacil 1.0       ");
                 System.out.println("===============================");
                 System.out.println(produto.toString());
-                // Mostrar dados da associação (quantidade e observações)
+                // Mostrar dados da associacao (quantidade e observacoes)
                 if (listaProduto != null) {
                     System.out.println("\n-- Dados desta lista --");
                     System.out.println("Quantidade: " + listaProduto.getQuantidade());
-                    System.out.println("Observações: " + (listaProduto.getObservacoes() != null ? listaProduto.getObservacoes() : ""));
+                    System.out.println("Observacoes: " + (listaProduto.getObservacoes() != null ? listaProduto.getObservacoes() : ""));
                 }
                 System.out.println("\nO que deseja realizar com a linkagem do produto acima com a lista " + lista.getNome() + "?\n");
                 System.out.println("(A) Alterar linkagem");
@@ -241,37 +242,37 @@ public class MenuUsuario {
                 System.out.println();
                 System.out.println("(S) Sair");
                 System.out.println();
-                System.out.print("Opção: ");
+                System.out.print("Opcao: ");
                 op = sc.nextLine().trim().toUpperCase();
 
                 switch (op) {
                     case "A":
                         ListaProduto lp = arquivoListaProduto.read(listaProduto.getID());
                         if (lp == null) {
-                            System.out.println("Associação não encontrada.");
+                            System.out.println("Associacao nao encontrada.");
                             return;
                         }
                         System.out.println("Nova quantidade (Qnt atual: " + lp.getQuantidade() + ") Pressione Enter para ignorar: ");
                         String sQtd = sc.nextLine();
                         if (!sQtd.isBlank()) lp.setQuantidade(Integer.parseInt(sQtd));
-                        System.out.println("Nova observação (Observação atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
+                        System.out.println("Nova observacao (Observacao atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
                         String obs = sc.nextLine();
                         if (!obs.isBlank()) lp.setObservacoes(obs);
-                        if (arquivoListaProduto.update(lp)) System.out.println("Associação atualizada!");
+                        if (arquivoListaProduto.update(lp)) System.out.println("Associacao atualizada!");
                         else System.out.println("Falha ao atualizar.");
                         break;
                     case "R":
                         if (arquivoListaProduto.delete(listaProduto.getID()))  {
-                            System.out.println("Associação removida!");
+                            System.out.println("Associacao removida!");
                             runningSelecionado = false;
                         }
-                        else System.out.println("Falha ao remover (pode não existir).");
+                        else System.out.println("Falha ao remover (pode nao existir).");
                         break;
                     case "S":
                         runningSelecionado = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }       
@@ -290,17 +291,17 @@ public class MenuUsuario {
             String op;
 
             if ( produtoAtual.getInativo() == true ) {
-                System.out.println("\n> Início > Produtos > " + produtoAtual.getNome());
+                System.out.println("\n> Inicio > Produtos > " + produtoAtual.getNome());
                 System.out.println("\n===============================");
-                System.out.println("       PresenteFácil 1.0       ");
+                System.out.println("       PresenteFacil 1.0       ");
                 System.out.println("===============================");
                 System.out.println(produtoAtual.toString());
-                System.out.println("\nESTE PRODUTO ESTÁ INATIVADO.\n");
+                System.out.println("\nESTE PRODUTO ESTa INATIVADO.\n");
                 System.out.println("(A) Ativar produto");
                 System.out.println();
                 System.out.println("(S) Sair");
                 System.out.println();
-                System.out.print("Opção: ");
+                System.out.print("Opcao: ");
 
                 op = sc.nextLine().toUpperCase();
 
@@ -314,7 +315,7 @@ public class MenuUsuario {
                                 System.out.println("Produto ativado com sucesso!");
                             } else {
                                 System.out.println("Erro ao ativar o produto.");
-                                produtoAtual.setInativo(true); // Desfaz a mudança em memória se a gravação falhar
+                                produtoAtual.setInativo(true); // Desfaz a mudanca em memoria se a gravacao falhar
                             }
                         }
                         break;
@@ -322,7 +323,7 @@ public class MenuUsuario {
                         runningSelecionado = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             } else {
@@ -340,15 +341,15 @@ public class MenuUsuario {
                     minhasListas[z++] = lista;
                 }
 
-                System.out.println("\n> Início > Produtos > " + produtoAtual.getNome());
+                System.out.println("\n> Inicio > Produtos > " + produtoAtual.getNome());
                 System.out.println("\n===============================");
-                System.out.println("       PresenteFácil 1.0       ");
+                System.out.println("       PresenteFacil 1.0       ");
                 System.out.println("===============================");
 
                 System.out.println(produtoAtual.toString());
 
                 if ( minhasListas.length == 0 ) {
-                    System.out.println("Não aparece em nenhuma das minhas listas."); 
+                    System.out.println("Nao aparece em nenhuma das minhas listas."); 
                 } else {
                     System.out.println("Aparece nas minhas listas:");
                     z = 1;
@@ -358,10 +359,10 @@ public class MenuUsuario {
                     } 
                 }
                 if ( listas.length - minhasListas.length <= 0 ) {
-                    System.out.println("Não aparece nas listas de outras pessoas.");
+                    System.out.println("Nao aparece nas listas de outras pessoas.");
                 } else {
                     int valor = listas.length - minhasListas.length;
-                    System.out.println("Aparece também em mais " + valor + "istas de outras pessoas.");
+                    System.out.println("Aparece tambem em mais " + valor + "istas de outras pessoas.");
                 }
                 
                 System.out.println("(A) Alterar dados do produto");
@@ -369,7 +370,7 @@ public class MenuUsuario {
                 System.out.println();
                 System.out.println("(S) Sair");
                 System.out.println();
-                System.out.print("Opção: ");
+                System.out.print("Opcao: ");
 
                 op = sc.nextLine().toUpperCase();
 
@@ -378,7 +379,7 @@ public class MenuUsuario {
                         Produto p = produtoAtual;
 
                         if (p == null) {
-                            System.out.println("Produto não encontrado.");
+                            System.out.println("Produto nao encontrado.");
                             return;
                         }
 
@@ -391,7 +392,7 @@ public class MenuUsuario {
                         String novoNome = sc.nextLine();
                         if (!novoNome.trim().isEmpty()) p.setNome(novoNome);
 
-                        System.out.println("Nova descrição (atual: " + p.getDescricao() + "): ");
+                        System.out.println("Nova descricao (atual: " + p.getDescricao() + "): ");
                         String novaDesc = sc.nextLine();
                         if (!novaDesc.trim().isEmpty()) p.setDescricao(novaDesc);
 
@@ -409,7 +410,7 @@ public class MenuUsuario {
                                 System.out.println("Produto inativado com sucesso!");
                             } else {
                                 System.out.println("Erro ao inativar o produto.");
-                                produtoAtual.setInativo(false); // Desfaz a mudança em memória se a gravação falhar
+                                produtoAtual.setInativo(false); // Desfaz a mudanca em memoria se a gravacao falhar
                             }
                         }
                         break;
@@ -417,7 +418,7 @@ public class MenuUsuario {
                         runningSelecionado = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }
@@ -429,12 +430,12 @@ public class MenuUsuario {
 
         Produto[] produtos = arqProduto.listProdutosInativados();
 
-        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 é da pagina 1 e 10 a 19 da página 2. Assim por diante.
+        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 e da pagina 1 e 10 a 19 da pagina 2. Assim por diante.
 
         while (runningListagem) {
-            System.out.println("\n> Início > Produtos > Listar Produtos ");
+            System.out.println("\n> Inicio > Produtos > Listar Produtos ");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println();
 
@@ -457,11 +458,11 @@ public class MenuUsuario {
 
             int paginaAtualTela = paginaAtual/10+1;
             int paginaMaxima = produtos.length/10+1;
-            System.out.println("Página atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
-            System.out.println("(A) Página anterior / (P) Próxima página");
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Digite o numero do produto listado ou A/P para trocar de páginas: ");
+            System.out.print("Digite o numero do produto listado ou A/P para trocar de paginas: ");
             String op;
 
             op = sc.nextLine();
@@ -481,7 +482,7 @@ public class MenuUsuario {
             if ( numero ) {
                 int resultado = Integer.parseInt(op);
                 if ( produtosPagina[resultado-1] == null ) {
-                    System.out.println("Não há um produto nesta posição.");
+                    System.out.println("Nao ha um produto nesta posicao.");
                 } else {
                     telaProdutoSelecionadoPeloMenu(produtosPagina[resultado-1]);
                 }
@@ -493,21 +494,21 @@ public class MenuUsuario {
                         paginaAtual -= 10;
                         if ( paginaAtual < 0 ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Primeira página atingida.");
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
                         }
                         break;
                     case "P":
                         paginaAtual += 10;
                         if ( paginaAtual > produtos.length ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Última página atingida.");
+                            System.out.println("Operacao invalida. Última pagina atingida.");
                         }
                         break;
                     case "S":
                         runningListagem = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }
@@ -519,12 +520,12 @@ public class MenuUsuario {
 
         Produto[] produtos = arqProduto.listProdutos();
 
-        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 é da pagina 1 e 10 a 19 da página 2. Assim por diante.
+        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 e da pagina 1 e 10 a 19 da pagina 2. Assim por diante.
 
         while (runningListagem) {
-            System.out.println("\n> Início > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Listar produtos");
+            System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > Gerenciar produtos > Vincular produtos > Listar produtos");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println();
 
@@ -547,11 +548,11 @@ public class MenuUsuario {
 
             int paginaAtualTela = paginaAtual/10+1;
             int paginaMaxima = produtos.length/10+1;
-            System.out.println("Página atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
-            System.out.println("(A) Página anterior / (P) Próxima página");
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Digite o numero do produto listado ou A/P para trocar de páginas: ");
+            System.out.print("Digite o numero do produto listado ou A/P para trocar de paginas: ");
             String op;
 
             op = sc.nextLine();
@@ -571,7 +572,7 @@ public class MenuUsuario {
             if ( numero ) {
                 int resultado = Integer.parseInt(op);
                 if ( produtosPagina[resultado-1] == null ) {
-                    System.out.println("Não há um produto nesta posição.");
+                    System.out.println("Nao ha um produto nesta posicao.");
                 } else {
                     boolean relacaoExiste = false;
                     ListaProduto[] relacoes = arquivoListaProduto.readPorProduto(produtosPagina[resultado-1].getID());
@@ -584,21 +585,21 @@ public class MenuUsuario {
                         }
                     }
                     if ( relacaoExiste ) {
-                        System.out.println("Linkagem do produto com lista " + lista.getNome() + "já existe. Deseja alterar variáveis da relação entre esse produto e sua lista?\n(A) Para aceitar (Outra tecla) Para sair");
+                        System.out.println("Linkagem do produto com lista " + lista.getNome() + "ja existe. Deseja alterar variaveis da relacao entre esse produto e sua lista?\n(A) Para aceitar (Outra tecla) Para sair");
                         op = sc.nextLine().trim().toUpperCase();
                         if ( op.equals("A") ) {
                             ListaProduto lp = arquivoListaProduto.read(relacaoExistente.getID());
                             if (lp == null) {
-                                System.out.println("Associação não encontrada.");
+                                System.out.println("Associacao nao encontrada.");
                                 return;
                             }
                             System.out.print("Nova quantidade (Qnt atual: " + lp.getQuantidade() + ") Pressione Enter para ignorar: ");
                             String sQtd = sc.nextLine();
                             if (!sQtd.isBlank()) lp.setQuantidade(Integer.parseInt(sQtd));
-                            System.out.print("Nova observação (Observação atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
+                            System.out.print("Nova observacao (Observacao atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
                             String obs = sc.nextLine();
                             if (!obs.isBlank()) lp.setObservacoes(obs);
-                            if (arquivoListaProduto.update(lp)) System.out.println("Associação atualizada!");
+                            if (arquivoListaProduto.update(lp)) System.out.println("Associacao atualizada!");
                             else System.out.println("Falha ao atualizar.");
                         } else {
                             runningListagem = false;
@@ -615,21 +616,21 @@ public class MenuUsuario {
                         paginaAtual -= 10;
                         if ( paginaAtual < 0 ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Primeira página atingida.");
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
                         }
                         break;
                     case "P":
                         paginaAtual += 10;
                         if ( paginaAtual > produtos.length ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Última página atingida.");
+                            System.out.println("Operacao invalida. Última pagina atingida.");
                         }
                         break;
                     case "S":
                         runningListagem = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }
@@ -640,12 +641,12 @@ public class MenuUsuario {
         boolean runningGtin = true;
 
         while (runningGtin) {
-            System.out.println("\n> Início > Listas > " + lista.getNome() + " Gerenciar produtos > Vincular produtos > Procurar por GTIN-13 ");
+            System.out.println("\n> Inicio > Listas > " + lista.getNome() + " Gerenciar produtos > Vincular produtos > Procurar por GTIN-13 ");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println();
-            System.out.println("(Código do Produto) Pesquisar por produto pelo GTIN-13");
+            System.out.println("(Codigo do Produto) Pesquisar por produto pelo GTIN-13");
             System.out.println("(S) Sair");
             String op;
 
@@ -656,7 +657,7 @@ public class MenuUsuario {
             } else {
                 Produto p = arqProduto.readGtin(op);
                 if ( p == null ) {
-                    System.out.println("Produto não encontrado com esse GTIN-13.");
+                    System.out.println("Produto nao encontrado com esse GTIN-13.");
                     runningGtin = false;
                     break;
                 }
@@ -672,21 +673,21 @@ public class MenuUsuario {
                 }
 
                 if ( relacaoEncontrada ) {
-                    System.out.println("Linkagem do produto com lista " + lista.getNome() + "já existe. Deseja alterar variáveis da relação entre esse produto e sua lista?\n(A) Para aceitar (Outra tecla) Para sair");
+                    System.out.println("Linkagem do produto com lista " + lista.getNome() + "ja existe. Deseja alterar variaveis da relacao entre esse produto e sua lista?\n(A) Para aceitar (Outra tecla) Para sair");
                     op = sc.nextLine().trim().toUpperCase();
                     if ( op.equals("A") ) {
                         ListaProduto lp = arquivoListaProduto.read(relacaoExistente.getID());
                         if (lp == null) {
-                            System.out.println("Associação não encontrada.");
+                            System.out.println("Associacao nao encontrada.");
                             return;
                         }
                         System.out.print("Nova quantidade (Qnt atual: " + lp.getQuantidade() + ") Pressione Enter para ignorar: ");
                         String sQtd = sc.nextLine();
                         if (!sQtd.isBlank()) lp.setQuantidade(Integer.parseInt(sQtd));
-                        System.out.print("Nova observação (Observação atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
+                        System.out.print("Nova observacao (Observacao atual: " + (lp.getObservacoes() != null ? lp.getObservacoes() : "") + ") Pressione Enter para ignorar: ");
                         String obs = sc.nextLine();
                         if (!obs.isBlank()) lp.setObservacoes(obs);
-                        if (arquivoListaProduto.update(lp)) System.out.println("Associação atualizada!");
+                        if (arquivoListaProduto.update(lp)) System.out.println("Associacao atualizada!");
                         else System.out.println("Falha ao atualizar.");
                         runningGtin = false;
                     } else {
@@ -698,7 +699,7 @@ public class MenuUsuario {
                         runningGtin = false;
                     }
                     else
-                        System.out.println("Produto não encontrado."); 
+                        System.out.println("Produto nao encontrado."); 
                 }
             }
         }
@@ -708,9 +709,9 @@ public class MenuUsuario {
         boolean runningOperacoes = true;
 
         while (runningOperacoes) {
-            System.out.println("\n> Início > Listas > " + lista.getNome() + " Gerenciar produtos > Vincular produtos ");
+            System.out.println("\n> Inicio > Listas > " + lista.getNome() + " Gerenciar produtos > Vincular produtos ");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println();
             System.out.println("(G) Acrescentar produto por GTIN-13");
@@ -725,11 +726,27 @@ public class MenuUsuario {
                     procurarPorGtinNaLista(lista);
                     break;
                 case "L":
-                    listarProdutosPelaLista(lista);
+                    // Buscar por palavras usando a lista invertida e permitir adicionar o produto selecionado à lista
+                    System.out.print("Digite as palavras para busca: ");
+                    String palavras = sc.nextLine();
+                    try {
+                        BuscadorProduto.ResultadoBusca[] resultados = buscadorProduto.buscarPorPalavras(palavras);
+                        if (resultados != null && resultados.length > 0) {
+                            System.out.println("\nProdutos encontrados ordenados por relevância:");
+                            telaPaginaDeProdutosBusca(resultados, lista);
+                        } else {
+                            System.out.println("Nenhum produto encontrado com essas palavras.");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro ao buscar produtos: " + e.getMessage());
+                    }
+                    break;
+                
+                    
                 case "S":
                     runningOperacoes = false;
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }
@@ -739,7 +756,7 @@ public class MenuUsuario {
     public void telaOperacoesDentroDeLista(Lista lista) throws Exception { 
         boolean runningOperacoes = true;
 
-        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 é da pagina 1 e 10 a 19 da página 2. Assim por diante.
+        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 e da pagina 1 e 10 a 19 da pagina 2. Assim por diante.
 
         while (runningOperacoes) {
             ListaProduto[] produtosRelacionados = arquivoListaProduto.readPorLista(lista.getID());
@@ -755,9 +772,9 @@ public class MenuUsuario {
                 produtosLista[z++] = produto; 
             }
 
-            System.out.println("\n> Início > Listas > " + lista.getNome() + " > Gerenciar produtos > ");
+            System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > Gerenciar produtos > ");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println();
 
@@ -773,7 +790,7 @@ public class MenuUsuario {
                     if ( produto.getInativo() == true ) {
                         System.out.print(" ( INATIVADO )");
                     }
-                    // associação correspondente
+                    // associacao correspondente
                     if ( produtosRelacionados != null && paginaAtual + i < produtosRelacionados.length ) {
                         ListaProduto assoc = produtosRelacionados[paginaAtual + i];
                         if ( assoc != null ) {
@@ -793,11 +810,11 @@ public class MenuUsuario {
             System.out.println();
             int paginaAtualTela = paginaAtual/10+1;
             int paginaMaxima = produtosLista.length/10+1;
-            System.out.println("Página atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
-            System.out.println("(A) Página anterior / (P) Próxima página");
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Digite o numero do produto listado ou operação para ser executada: ");
+            System.out.print("Digite o numero do produto listado ou operacao para ser executada: ");
             String op;
 
             op = sc.nextLine().trim().toUpperCase();
@@ -817,7 +834,7 @@ public class MenuUsuario {
             if ( numero ) {
                 int resultado = Integer.parseInt(op);
                 if ( produtosPagina[resultado-1] == null ) {
-                    System.out.println("Não há um produto nesta posição.");
+                    System.out.println("Nao ha um produto nesta posicao.");
                 } else {
                     Produto produto = produtosPagina[resultado-1];
                     ListaProduto[] listaProdutos = arquivoListaProduto.readPorProduto(produto.getID());
@@ -846,21 +863,21 @@ public class MenuUsuario {
                         paginaAtual -= 10;
                         if ( paginaAtual < 0 ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Primeira página atingida.");
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
                         }
                         break;
                     case "P":
                         paginaAtual += 10;
                         if ( paginaAtual > produtosLista.length ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Última página atingida.");
+                            System.out.println("Operacao invalida. Última pagina atingida.");
                         }
                         break;
                     case "S":
                         runningOperacoes = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }
@@ -869,7 +886,7 @@ public class MenuUsuario {
 
     public void telaMenuListaSelecionada(Lista lista) throws Exception {
         boolean runningSelecionada = true;
-
+        
         Lista listaAtual = lista;
 
         while (runningSelecionada) {
@@ -878,9 +895,9 @@ public class MenuUsuario {
 
             String op;
 
-            System.out.println("\n> Início > Listas > " + lista.getNome() + " > ");
+            System.out.println("\n> Inicio > Listas > " + lista.getNome() + " > ");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println("-------------------------------");
             System.out.println("Lista: " + lista.getNome());
@@ -892,7 +909,7 @@ public class MenuUsuario {
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Opção: ");
+            System.out.print("Opcao: ");
 
             op = sc.nextLine().toUpperCase();
 
@@ -929,7 +946,7 @@ public class MenuUsuario {
                     runningSelecionada = false;
                     break;
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }
@@ -960,13 +977,13 @@ public class MenuUsuario {
 
             String op;
 
-            // Cabeçalho
-            System.out.println("\n> Início > Listas");
+            // Cabecalho
+            System.out.println("\n> Inicio > Listas");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
 
-            // Listagem das listas do usuário 
+            // Listagem das listas do usuario 
             System.out.println();
             System.out.println("Listas:");
             System.out.println("-------------------------------");
@@ -985,7 +1002,7 @@ public class MenuUsuario {
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Opção: ");
+            System.out.print("Opcao: ");
 
             op = sc.nextLine();
 
@@ -995,24 +1012,25 @@ public class MenuUsuario {
                         System.out.println("Nenhuma lista encontrada.");
                         break;
                     }
-                    System.out.print("Escolha (por posição) uma lista para consultar: ");
+                    System.out.print("Escolha (por posicao) uma lista para consultar: ");
                     int pos = -1;
                     String input = sc.nextLine();
                     try {
                         pos = Integer.parseInt(input);
                     } catch (Exception e) {
-                        System.out.println("Entrada não corresponde a um número");
+                        System.out.println("Entrada nao corresponde a um número");
                     }
 
                     Lista listaConsulta = usuarioListas[pos-1];
                     if ( listaConsulta == null ) {
-                        System.out.println("Lista não existente na determinada posição");
+                        System.out.println("Lista nao existente na determinada posicao");
                         break;
                     }
                     telaMenuListaSelecionada(listaConsulta);
                     break;
                 case "C":
                     try {
+
                         Lista novaLista = lista_opcao_c();
                         arqLista.create(novaLista, id);
                         System.out.println("\nLista criada com sucesso!");
@@ -1026,23 +1044,22 @@ public class MenuUsuario {
                     break;
 
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }
     }
 
-    public void telaPaginaDeProdutosNome(Produto[] produtos) throws Exception {
+     public void telaPaginaDeProdutosNomeLista(Produto[] produtos) throws Exception {
         boolean runningListagem = true;
-
-        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 é da pagina 1 e 10 a 19 da página 2. Assim por diante.
-
+        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 e da pagina 1 e 10 a 19 da pagina 2. Assim por diante.
+        
         while (runningListagem) {
-            System.out.println("\n> Início > Produtos > Encontrar por nome ");
-            System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
-            System.out.println("===============================");
-            System.out.println();
+            // System.out.println("\n> Inicio > Produtos > Encontrar por nome ");
+            // System.out.println("\n===============================");
+            // System.out.println("       PresenteFacil 1.0       ");
+            // System.out.println("===============================");
+            // System.out.println();
 
                 System.out.println();
 
@@ -1067,11 +1084,11 @@ public class MenuUsuario {
 
             int paginaAtualTela = paginaAtual/10+1;
             int paginaMaxima = produtos.length/10+1;
-            System.out.println("Página atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
-            System.out.println("(A) Página anterior / (P) Próxima página");
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Digite o numero do produto listado ou A/P para trocar de páginas: ");
+            System.out.print("Digite o numero do produto listado ou A/P para trocar de paginas: ");
             String op;
 
             op = sc.nextLine();
@@ -1091,7 +1108,101 @@ public class MenuUsuario {
             if ( numero ) {
                 int resultado = Integer.parseInt(op);
                 if ( produtosPagina[resultado-1] == null ) {
-                    System.out.println("Não há um produto nesta posição.");
+                    System.out.println("Nao ha um produto nesta posicao.");
+                } else {
+                    telaProdutoSelecionadoPelaLista(produtosPagina[resultado-1], null, 2, null);
+                    //telaProdutoSelecionadoPeloMenu(produtosPagina[resultado-1]); 
+                }
+            } else if (numeroInvalido) {
+                System.out.println("Numero entrado invalido.");
+            } else {
+                switch (op) {
+                    case "A":
+                        paginaAtual -= 10;
+                        if ( paginaAtual < 0 ) {
+                            paginaAtual = 0;
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
+                        }
+                        break;
+                    case "P":
+                        paginaAtual += 10;
+                        if ( paginaAtual > produtos.length ) {
+                            paginaAtual = 0;
+                            System.out.println("Operacao invalida. Última pagina atingida.");
+                        }
+                        break;
+                    case "S":
+                        runningListagem = false;
+                        break;
+                    default:
+                        System.out.println("Opcao Invalida!");
+                        break;
+                }
+            }
+        }
+    }
+
+
+
+    public void telaPaginaDeProdutosNome(Produto[] produtos) throws Exception {
+        boolean runningListagem = true;
+        int paginaAtual = 0; // multiplos de 10. Elemento 0 a 9 e da pagina 1 e 10 a 19 da pagina 2. Assim por diante.
+        
+        while (runningListagem) {
+            // System.out.println("\n> Inicio > Produtos > Encontrar por nome ");
+            // System.out.println("\n===============================");
+            // System.out.println("       PresenteFacil 1.0       ");
+            // System.out.println("===============================");
+            // System.out.println();
+
+                System.out.println();
+
+                Produto[] produtosPagina = new Produto[10];
+            for ( int z = 0; z < 10 && z+paginaAtual < produtos.length; z++ ) {
+                produtosPagina[z] = produtos[paginaAtual+z];
+            }
+            int z = 1;
+            for ( Produto produto : produtosPagina ) {
+                if ( produto != null ) {
+                    System.out.print("["+ z +"]" + produto.getNome());
+                    if ( produto.getInativo() == true ) {
+                        System.out.print(" ( INATIVADO )");
+                    }
+                    System.out.println();
+                    z++;
+                }
+            }
+            System.out.println();
+            System.out.println("-------------------------------");
+
+
+            int paginaAtualTela = paginaAtual/10+1;
+            int paginaMaxima = produtos.length/10+1;
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
+            System.out.println("(S) Sair");
+            System.out.println();
+            System.out.print("Digite o numero do produto listado ou A/P para trocar de paginas: ");
+            String op;
+
+            op = sc.nextLine();
+            boolean numero = false;
+            boolean numeroInvalido = false;
+            try {
+                int resultado = Integer.parseInt(op);
+                if ( resultado >= 1 && resultado <= 10 ) {
+                    numero = true;
+                } else {
+                    numeroInvalido = true;
+                }
+            } catch (NumberFormatException e) {
+                //numero nao pode ser convertido
+            }
+            
+            if ( numero ) {
+                int resultado = Integer.parseInt(op);
+                if ( produtosPagina[resultado-1] == null ) {
+                    System.out.println("Nao ha um produto nesta posicao.");
                 } else {
                     telaProdutoSelecionadoPeloMenu(produtosPagina[resultado-1]); 
                 }
@@ -1103,21 +1214,116 @@ public class MenuUsuario {
                         paginaAtual -= 10;
                         if ( paginaAtual < 0 ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Primeira página atingida.");
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
                         }
                         break;
                     case "P":
                         paginaAtual += 10;
                         if ( paginaAtual > produtos.length ) {
                             paginaAtual = 0;
-                            System.out.println("Operação inválida. Última página atingida.");
+                            System.out.println("Operacao invalida. Última pagina atingida.");
                         }
                         break;
                     case "S":
                         runningListagem = false;
                         break;
                     default:
-                        System.out.println("Opção Inválida!");
+                        System.out.println("Opcao Invalida!");
+                        break;
+                }
+            }
+        }
+    }
+
+    public void telaPaginaDeProdutosBusca(BuscadorProduto.ResultadoBusca[] resultados, Lista lista) throws Exception {
+        boolean runningListagem = true;
+        int paginaAtual = 0;
+
+        while (runningListagem) {
+            System.out.println();
+
+            BuscadorProduto.ResultadoBusca[] pagina = new BuscadorProduto.ResultadoBusca[10];
+            for (int z = 0; z < 10 && z + paginaAtual < resultados.length; z++) {
+                pagina[z] = resultados[paginaAtual + z];
+            }
+
+            int idx = 1;
+            for (BuscadorProduto.ResultadoBusca r : pagina) {
+                if (r != null) {
+                    Produto p = r.getProduto();
+                    System.out.printf("[%d] %s | Pontuação: %.4f\n", idx, p.getNome(), r.getPontuacaoTotal());
+                    // Mostrar detalhes TF/IDF por termo
+                    System.out.print("    Termos: ");
+                    boolean first = true;
+                    for (String termo : r.getTfIdfs().keySet()) {
+                        if (!first) System.out.print("; ");
+                        first = false;
+                        float tf = r.getTfs().getOrDefault(termo, 0f);
+                        float idf = r.getIdfs().getOrDefault(termo, 0f);
+                        float tfidf = r.getTfIdfs().getOrDefault(termo, 0f);
+                        System.out.print(termo + "(tf=" + String.format("%.3f", tf) + ", idf=" + String.format("%.3f", idf) + ", tf-idf=" + String.format("%.3f", tfidf) + ")");
+                    }
+                    System.out.println();
+                    idx++;
+                }
+            }
+
+            System.out.println();
+            int paginaAtualTela = paginaAtual / 10 + 1;
+            int paginaMaxima = resultados.length / 10 + 1;
+            System.out.println("Pagina atual: (" + paginaAtualTela + "/" + paginaMaxima + ")");
+            System.out.println("(A) Pagina anterior / (P) Proxima pagina");
+            System.out.println("(S) Sair");
+            System.out.println();
+            System.out.print("Digite o numero do produto listado ou A/P para trocar de paginas: ");
+
+            String op = sc.nextLine();
+            boolean numero = false;
+            boolean numeroInvalido = false;
+            try {
+                int resultado = Integer.parseInt(op);
+                if (resultado >= 1 && resultado <= 10) numero = true;
+                else numeroInvalido = true;
+            } catch (NumberFormatException e) {
+                
+            }
+
+            if (numero) {
+                int selecionado = Integer.parseInt(op);
+                if (pagina[selecionado - 1] == null) {
+                    System.out.println("Nao ha um produto nesta posicao.");
+                } else {
+                    Produto produto = pagina[selecionado - 1].getProduto();
+                    if (lista == null) {
+                        telaProdutoSelecionadoPeloMenu(produto);
+                    } else {
+                        // reutiliza fluxo de adicionar produto à lista
+                        telaProdutoSelecionadoPelaLista(produto, null, 2, lista);
+                    }
+                }
+            } else if (numeroInvalido) {
+                System.out.println("Numero entrado invalido.");
+            } else {
+                switch (op.toUpperCase()) {
+                    case "A":
+                        paginaAtual -= 10;
+                        if (paginaAtual < 0) {
+                            paginaAtual = 0;
+                            System.out.println("Operacao invalida. Primeira pagina atingida.");
+                        }
+                        break;
+                    case "P":
+                        paginaAtual += 10;
+                        if (paginaAtual > resultados.length) {
+                            paginaAtual = 0;
+                            System.out.println("Operacao invalida. Última pagina atingida.");
+                        }
+                        break;
+                    case "S":
+                        runningListagem = false;
+                        break;
+                    default:
+                        System.out.println("Opcao Invalida!");
                         break;
                 }
             }
@@ -1129,43 +1335,40 @@ public class MenuUsuario {
     private void inicializarBuscador() throws Exception {
         if (buscadorProduto == null) {
             buscadorProduto = new BuscadorProduto("produto.palavras.d.db", "produto.palavras.c.db", arqProduto);
-            
-            // Indexa todos os produtos se ainda não foram indexados
-            Produto[] produtos = arqProduto.listProdutos();
-            for (Produto p : produtos) {
-                buscadorProduto.indexarProduto(p);
-            }
+            // Reconstrói o índice para garantir que TF/IDF use a implementação atual
+            buscadorProduto.reconstruirIndice();
         }
     }
 
     public void telaMenuProduto() throws Exception {
         boolean runningMenuProduto = true;
 
+        // Inicializa o buscador (indexa produtos) antes de mostrar o menu
+        inicializarBuscador();
+
         while ( runningMenuProduto ) {
             String op;
         
-            System.out.println("\n> Início > Produtos");
+            System.out.println("\n> Inicio > Produtos");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println("(C) Cadastrar produto");
             System.out.println("(L) Listar produtos");
             //System.out.println("(3) Buscar produto por ID");
             System.out.println("(G) Buscar produto por GTIN-13");
-            System.out.println("(N) Buscar produtos por nome");
+            //System.out.println("(N) Buscar produtos por nome");
             System.out.println("(P) Buscar produtos por palavras");
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Opção: ");
-
+            System.out.print("Opcao: ");
             op = sc.nextLine();
-
-            switch (op) {
+            switch (op.toUpperCase()) {
                 case "C": {
                     System.out.println("Nome: ");
                     String nome = sc.nextLine();
-                    System.out.println("Descrição: ");
+                    System.out.println("Descricao: ");
                     String descricao = sc.nextLine();
                     String gtin = gerarGtin13();
                     System.out.println("GTIN-13 gerado: " + gtin);
@@ -1187,7 +1390,7 @@ public class MenuUsuario {
                     if (p != null)
                         System.out.println(p.toString());
                     else
-                        System.out.println("Produto não encontrado."); }
+                        System.out.println("Produto nao encontrado."); }
                     break; 
                 */
                 case "G": { 
@@ -1197,7 +1400,7 @@ public class MenuUsuario {
                     if (p != null)
                         telaProdutoSelecionadoPeloMenu(p);
                     else
-                        System.out.println("Produto não encontrado."); }
+                        System.out.println("Produto nao encontrado."); }
                     break;
                /*  case "N": {
                         System.out.print("Nome: ");
@@ -1214,10 +1417,10 @@ public class MenuUsuario {
                         System.out.print("Digite as palavras para busca: ");
                         String palavras = sc.nextLine();
                         try {
-                            Produto[] produtos = buscadorProduto.buscarPorPalavras(palavras);
-                            if (produtos.length > 0) {
+                            BuscadorProduto.ResultadoBusca[] resultados = buscadorProduto.buscarPorPalavras(palavras);
+                            if (resultados != null && resultados.length > 0) {
                                 System.out.println("\nProdutos encontrados ordenados por relevância:");
-                                telaPaginaDeProdutosNome(produtos);
+                                telaPaginaDeProdutosBusca(resultados, null);
                             } else {
                                 System.out.println("Nenhum produto encontrado com essas palavras.");
                             }
@@ -1229,7 +1432,7 @@ public class MenuUsuario {
                     runningMenuProduto = false;
                     break;
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }
@@ -1243,9 +1446,9 @@ public class MenuUsuario {
         while (runningMenuDados) {
             Usuario info = arquivoUsuario.readId(id);
 
-            System.out.println("\n> Início > Meus Dados");
+            System.out.println("\n> Inicio > Meus Dados");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println(info.toString());
             System.out.println("(A) Atualizar dados");
@@ -1253,7 +1456,7 @@ public class MenuUsuario {
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Opção: ");
+            System.out.print("Opcao: ");
 
             op = sc.nextLine();
 
@@ -1287,16 +1490,16 @@ public class MenuUsuario {
                         }
 
                         if (arquivoUsuario.update(usuarioAtual)) {
-                            System.out.println("\nUsuário atualizado com sucesso!");
+                            System.out.println("\nUsuario atualizado com sucesso!");
                         } else {
-                            System.out.println("\nFalha ao atualizar usuário!");
+                            System.out.println("\nFalha ao atualizar usuario!");
                         }
                     } else {
-                        System.out.println("Usuário não encontrado ou inativo.");
+                        System.out.println("Usuario nao encontrado ou inativo.");
                     }
                     break;
                 case "D":
-                    System.out.print("Deseja excluir permanentemente sua conta? Essa ação é irreversível. Digite (S) para aceitar e qualquer outra tecla para recusar: ");
+                    System.out.print("Deseja excluir permanentemente sua conta? Essa acao e irreversivel. Digite (S) para aceitar e qualquer outra tecla para recusar: ");
                     String comando = (sc.nextLine().trim());
 
                     if (comando.toUpperCase().equals("S")) {
@@ -1304,16 +1507,16 @@ public class MenuUsuario {
 
                         if (usuarioExcluir != null && usuarioExcluir.getAtivo()) {
                             if (arquivoUsuario.delete(usuarioExcluir.getID())) {
-                                System.out.println("\nUsuário excluído com sucesso!");
+                                System.out.println("\nUsuario excluido com sucesso!");
                                 runningMenuDados = false;
                             } else {
-                                System.out.println("\nFalha ao excluir usuário!");
+                                System.out.println("\nFalha ao excluir usuario!");
                             }
                         } else {
-                            System.out.println("Usuário não encontrado ou já inativo.");
+                            System.out.println("Usuario nao encontrado ou ja inativo.");
                         }
                     } else {
-                        System.out.println("\nOperação cancelada.");
+                        System.out.println("\nOperacao cancelada.");
                     }
 
                     break;
@@ -1321,7 +1524,7 @@ public class MenuUsuario {
                     runningMenuDados = false;
                     break;
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }
@@ -1338,18 +1541,18 @@ public class MenuUsuario {
             } // testa se conta foi excluida
 
 
-            System.out.println("\n> Início");
+            System.out.println("\n> Inicio");
             System.out.println("\n===============================");
-            System.out.println("       PresenteFácil 1.0       ");
+            System.out.println("       PresenteFacil 1.0       ");
             System.out.println("===============================");
             System.out.println("(D) Meus dados");
             System.out.println("(L) Minhas listas");
             System.out.println("(P) Produtos");
-            System.out.println("(B) Buscar lista de outro usuário");
+            System.out.println("(B) Buscar lista de outro usuario");
             System.out.println();
             System.out.println("(S) Sair");
             System.out.println();
-            System.out.print("Opção: ");
+            System.out.print("Opcao: ");
 
             op = sc.nextLine();
 
@@ -1366,12 +1569,12 @@ public class MenuUsuario {
                     telaMenuProduto();
                     break;
                 case "B":
-                    System.out.print("Entre com o código da lista para consultar: ");
+                    System.out.print("Entre com o codigo da lista para consultar: ");
                     String codigo;
                     codigo = sc.nextLine().trim();
                     do {
-                        System.out.println("ERRO! Código compartilhável deve ter exatamente 10 caracteres. ");
-                        System.out.print("\nEntre com o código da lista para consultar: ");
+                        System.out.println("ERRO! Codigo compartilhavel deve ter exatamente 10 caracteres. ");
+                        System.out.print("\nEntre com o codigo da lista para consultar: ");
                         codigo = sc.nextLine().trim();
                     } while ( codigo.length() != 10 );
                     
@@ -1382,7 +1585,7 @@ public class MenuUsuario {
                             
                             Usuario dono = arquivoUsuario.readId(lista.getUID());
                             if ( dono == null ) {
-                                System.out.println("Erro do sistema ao encontrar usuário dono da lista ou usuário deletado. ");
+                                System.out.println("Erro do sistema ao encontrar usuario dono da lista ou usuario deletado. ");
                             } else {
                                 System.out.println("Dono da lista: " + dono.getNome());
                             }
@@ -1398,9 +1601,9 @@ public class MenuUsuario {
                                     for (ListaProduto lp : relacoes) {
                                         Produto prod = arqProduto.read(lp.getIdProduto());
                                         if (prod != null) {
-                                            System.out.println("[" + idxp + "] " + prod.getNome() + " - Quantidade: " + lp.getQuantidade() + " - Observações: " + (lp.getObservacoes() != null ? lp.getObservacoes() : ""));
+                                            System.out.println("[" + idxp + "] " + prod.getNome() + " - Quantidade: " + lp.getQuantidade() + " - Observacoes: " + (lp.getObservacoes() != null ? lp.getObservacoes() : ""));
                                         } else {
-                                            System.out.println("[" + idxp + "] Produto não encontrado (ID: " + lp.getIdProduto() + ")");
+                                            System.out.println("[" + idxp + "] Produto nao encontrado (ID: " + lp.getIdProduto() + ")");
                                         }
                                         idxp++;
                                     }
@@ -1412,7 +1615,7 @@ public class MenuUsuario {
                             System.out.println("\nPressione Enter para voltar...");
                             sc.nextLine();
                         } else {
-                            System.out.println("Lista não encontrada.");
+                            System.out.println("Lista nao encontrada.");
                         }
                     } catch (Exception e) {
                         System.err.println("Erro ao encontrar lista compartilhada. ");
@@ -1422,7 +1625,7 @@ public class MenuUsuario {
                     runningMenuUsuario = false;
                     break;
                 default:
-                    System.out.println("Opção Inválida!");
+                    System.out.println("Opcao Invalida!");
                     break;
             }
         }

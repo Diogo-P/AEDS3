@@ -28,6 +28,31 @@ public class BuscadorProduto {
         this.arquivoProduto = arquivoProduto;
     }
 
+    // Resultado detalhado da busca 
+    public static class ResultadoBusca {
+        private Produto produto;
+        private final Map<String, Float> tfs = new HashMap<>();
+        private final Map<String, Float> idfs = new HashMap<>();
+        private final Map<String, Float> tfIdfs = new HashMap<>();
+        private float pontuacaoTotal = 0f;
+
+        public ResultadoBusca(Produto produto) {
+            this.produto = produto;
+        }
+
+        public Produto getProduto() { return produto; }
+        public Map<String, Float> getTfs() { return tfs; }
+        public Map<String, Float> getIdfs() { return idfs; }
+        public Map<String, Float> getTfIdfs() { return tfIdfs; }
+        public float getPontuacaoTotal() { return pontuacaoTotal; }
+        private void addTermo(String termo, float tf, float idf, float tfIdf) {
+            tfs.put(termo, tf);
+            idfs.put(termo, idf);
+            tfIdfs.put(termo, tfIdf);
+            pontuacaoTotal += tfIdf;
+        }
+    }
+
     
      //Retorna o número atual de documentos indexados
      
@@ -44,7 +69,8 @@ public class BuscadorProduto {
         // Divide em palavras e filtra
         List<String> termos = new ArrayList<>();
         for (String palavra : texto.split("[^a-z0-9]+")) {
-            if (palavra.length() > 2 && !PALAVRAS_VAZIAS.contains(palavra)) {
+            // Aceita também tokens curtos  desde que não sejam stopwords
+            if (palavra.length() > 0 && !PALAVRAS_VAZIAS.contains(palavra)) {
                 termos.add(palavra);
             }
         }
@@ -61,20 +87,22 @@ public class BuscadorProduto {
             contagens.merge(termo, 1, Integer::sum);
         }
 
-        // Converte para frequências
+        // Converte para frequências usando TF = count / totalTerms 
         Map<String, Float> frequencias = new HashMap<>();
-        float contagemMaxima = Collections.max(contagens.values());
+        float totalTermos = 0f;
+        for (Integer v : contagens.values()) totalTermos += v;
+        if (totalTermos <= 0f) return frequencias;
         for (Map.Entry<String, Integer> entrada : contagens.entrySet()) {
-            frequencias.put(entrada.getKey(), entrada.getValue() / contagemMaxima);
+            frequencias.put(entrada.getKey(), entrada.getValue() / totalTermos);
         }
         return frequencias;
     }
 
    
-     // Indexa um produto na estrutura de lista invertida
+    // Indexa um produto na estrutura de lista invertida usando o nome
     public void indexarProduto(Produto produto) throws Exception {
-        // Obtém texto do nome e descrição do produto
-        String texto = produto.getNome() + " " + produto.getDescricao();
+        // Obtém texto do nome do produto
+        String texto = produto.getNome();
         List<String> termos = processarTexto(texto);
         Map<String, Float> frequencias = calcularFrequenciasTermos(termos);
 
@@ -95,59 +123,75 @@ public class BuscadorProduto {
         // Obtém texto do nome e descrição do produto
         String texto = produto.getNome() + " " + produto.getDescricao();
         List<String> termos = processarTexto(texto);
-
         // Remove cada termo para este produto
+        boolean removedAny = false;
         for (String termo : termos) {
-            listaInvertida.delete(termo, produto.getID());
+            boolean removed = listaInvertida.delete(termo, produto.getID());
+            if (removed) removedAny = true;
         }
 
-        // Atualiza contagem de documentos
-        listaInvertida.decrementaEntidades();
+        // Atualiza contagem de documentos somente se ao menos um termo foi removido
+        if (removedAny) {
+            listaInvertida.decrementaEntidades();
+        }
     }
 
-    //Calcula IDF  para um termo
+    // Reconstrói o índice para refletir possíveis mudanças no cálculo de TF/IDF (Usado para Teste)
+    public void reconstruirIndice() throws Exception {
+        Produto[] produtos = arquivoProduto.listProdutos();
+        for (Produto p : produtos) {
+            try {
+                removerProduto(p);
+            } catch (Exception e) {
+                
+            }
+            indexarProduto(p);
+        }
+    }
+
+    // Calcula IDF com IDF = 1 + log10(N / df)
     private float calcularIDF(String termo) throws Exception {
         ElementoLista[] documentos = listaInvertida.read(termo);
         int documentosComTermo = documentos.length;
         int totalDocumentos = listaInvertida.numeroEntidades();
-        
-        
-        return (float) Math.log((totalDocumentos + 1) / (documentosComTermo + 1));
+        if (totalDocumentos <= 0) return 1f;
+        double df = documentosComTermo <= 0 ? 1.0 : (double) documentosComTermo;
+        double ratio = ((double) totalDocumentos) / df;
+        return 1f + (float) Math.log10(ratio);
     }
 
     
-     //Busca produtos por palavras, retornando resultados ordenados 
-    public Produto[] buscarPorPalavras(String consulta) throws Exception {
+    // Busca produtos por palavras, retornando resultados ordenados com detalhes TF/IDF
+    public ResultadoBusca[] buscarPorPalavras(String consulta) throws Exception {
         List<String> termosConsulta = processarTexto(consulta);
-        Map<Integer, Float> pontuacoes = new HashMap<>();
 
-        // Calcula  as pontuações TF-IDF
+        // Mapa temporário: produtoId -> ResultadoBusca
+        Map<Integer, ResultadoBusca> mapaResultados = new HashMap<>();
+
         for (String termo : termosConsulta) {
             ElementoLista[] documentos = listaInvertida.read(termo);
             float idfTermo = calcularIDF(termo);
 
             for (ElementoLista doc : documentos) {
                 int idDoc = doc.getId();
-                float tfIdfTermo = doc.getFrequencia() * idfTermo;
-                
-                pontuacoes.merge(idDoc, tfIdfTermo, Float::sum);
+                float tf = doc.getFrequencia();
+                float tfIdfTermo = tf * idfTermo;
+
+                ResultadoBusca res = mapaResultados.get(idDoc);
+                if (res == null) {
+                    Produto p = arquivoProduto.read(idDoc);
+                    if (p == null || p.getInativo()) continue; // ignora produtos inexistentes ou inativos
+                    res = new ResultadoBusca(p);
+                    mapaResultados.put(idDoc, res);
+                }
+                res.addTermo(termo, tf, idfTermo, tfIdfTermo);
             }
         }
 
-        // Ordena resultados por relevância
-        List<Map.Entry<Integer, Float>> resultados = new ArrayList<>(pontuacoes.entrySet());
-        resultados.sort((a, b) -> Float.compare(b.getValue(), a.getValue()));
-        System.out.println(resultados);
+        // Ordena por pontuação 
+        List<ResultadoBusca> resultados = new ArrayList<>(mapaResultados.values());
+        resultados.sort((a, b) -> Float.compare(b.getPontuacaoTotal(), a.getPontuacaoTotal()));
 
-        // Converte para array de produtos
-        List<Produto> produtosEncontrados = new ArrayList<>();
-        for (Map.Entry<Integer, Float> entrada : resultados) {
-            Produto p = arquivoProduto.read(entrada.getKey());
-            if (p != null && !p.getInativo()) {
-                produtosEncontrados.add(p);
-            }
-        }
-
-        return produtosEncontrados.toArray(new Produto[0]);
+        return resultados.toArray(new ResultadoBusca[0]);
     }
 }
