@@ -36,7 +36,7 @@ public class MenuUsuario {
 
     public MenuUsuario(int id) throws Exception {
         this.id = id;
-        this.mostrarCalculos = true;
+        this.mostrarCalculos = false;
         arquivoUsuario = new ArquivoUsuario();
         arquivoLista = new ArquivoLista();
         arqProduto = new ArquivoProduto();
