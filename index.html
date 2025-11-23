@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memória Secundária Fácil - Projeto Extensionista</title>
+    <style>
+        /* --- Variáveis de Cores --- */
+        :root {
+            --cor-fundo: #66b5b2;     /* Verde-azulado */
+            --cor-primaria: #6a7e59;  /* Verde Musgo */
+            --cor-secundaria: #d12c3a; /* Vermelho */
+            --cor-texto-claro: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--cor-fundo);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+            /* Scroll natural da página liberado */
+            overflow-y: auto; 
+        }
+
+        /* --- Cabeçalho --- */
+        .secao-vermelha {
+            background-color: var(--cor-secundaria);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: var(--cor-texto-claro);
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .header-top {
+            justify-content: flex-start;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* --- Container Principal --- */
+        .conteudo-principal {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- Blocos Expansíveis (Accordions) --- */
+        .bloco-expansivel {
+            background-color: var(--cor-fundo);
+            border: 3px solid var(--cor-secundaria);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .bloco-header {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-texto-claro);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            user-select: none;
+        }
+
+        .bloco-header:hover {
+            background-color: #b92532;
+        }
+
+        .seta-expandir {
+            transition: transform 0.3s;
+        }
+
+        .bloco-conteudo {
+            padding: 20px;
+            display: none; /* Escondido por padrão */
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Classe para quando o bloco está aberto */
+        .bloco-expansivel.aberto .bloco-conteudo {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .bloco-expansivel.aberto .seta-expandir {
+            transform: rotate(180deg);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Estilos Internos dos Blocos --- */
+
+        /* Tipografia Interna */
+        h2 {
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--cor-primaria);
+            padding-bottom: 5px;
+            font-size: 1.4rem;
+        }
+
+        p, label, .lista-gtins {
+            color: #1a252f;
+            font-weight: 600;
+        }
+
+        .explicacao-texto {
+            font-size: 1rem;
+            white-space: pre-wrap;
+            color: #1a252f;
+            background-color: rgba(255,255,255,0.5);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid var(--cor-primaria);
+        }
+
+        /* --- Menu CRUD --- */
+        .menu-crud {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-crud {
+            background-color: var(--cor-primaria);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-crud:hover {
+            transform: translateY(-2px);
+            border-color: var(--cor-texto-claro);
+            filter: brightness(1.1);
+        }
+
+        .btn-texto {
+            flex: 2;
+            padding-left: 15px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .btn-icone {
+            flex: 1;
+            background-color: rgba(0,0,0,0.2);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        .btn-icone img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* --- Formulários --- */
+        .form-area {
+            background-color: rgba(255,255,255,0.4);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--cor-primaria);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--cor-primaria);
+            border-radius: 4px;
+            background-color: #fff;
+            color: #333;
+            font-size: 1rem;
+        }
+        
+        .btn-acao {
+            background-color: var(--cor-secundaria);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.2s;
+            font-size: 1rem;
+        }
+        
+        .btn-acao:hover { filter: brightness(1.1); }
+
+        /* --- Hex Viewer --- */
+        .hex-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-content: flex-start;
+        }
+
+        .byte-box {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #333;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #333;
+            position: relative;
+            cursor: default;
+        }
+
+        .byte-box.byte-id { background-color: #d1e7dd; } 
+        .byte-box.byte-len { background-color: #fff3cd; } 
+        .byte-box.byte-str { background-color: #cfe2ff; } 
+        .byte-box.byte-gtin { background-color: #f8d7da; } 
+        .byte-box.byte-price { background-color: #e2e3e5; } 
+
+        .byte-box:hover::after {
+            content: attr(data-info);
+            position: absolute;
+            bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: var(--cor-secundaria);
+            color: #fff;
+            padding: 6px; border-radius: 4px;
+            font-size: 0.8rem; white-space: nowrap; z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* --- Rodapé --- */
+        .footer-bottom {
+            justify-content: space-between;
+            margin-top: auto; /* Empurra para o final se a página for pequena */
+        }
+        .info-projeto { font-weight: bold; }
+
+        .btn-avaliar {
+            background-color: var(--cor-primaria);
+            color: white;
+            padding: 8px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid white;
+        }
+
+        .link-autores {
+            color: var(--cor-texto-claro);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* --- Modal Autores --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-overlay.active { display: flex; }
+
+        .autores-box-outer {
+            background-color: var(--cor-secundaria);
+            padding: 20px;
+            width: 500px;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border-radius: 4px;
+        }
+
+        .autores-box-inner {
+            background-color: var(--cor-fundo);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--cor-primaria); 
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+            top: -10px; left: -10px;
+            border: 3px solid var(--cor-primaria);
+            padding: 30px;
+            gap: 10px;
+        }
+
+        .autores-list p {
+            color: var(--cor-primaria);
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            cursor: pointer;
+            font-size: 2rem;
+            color: var(--cor-primaria);
+            line-height: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="secao-vermelha header-top">
+        Memória Secundária Fácil - Projeto Extensionista
+    </header>
+
+    <!-- Corpo Principal com Blocos Expansíveis -->
+    <div class="conteudo-principal">
+        
+        <!-- Bloco 1: Informações e Resultados -->
+        <div class="bloco-expansivel aberto" id="bloco-info">
+            <div class="bloco-header" onclick="ui.toggleBlock('bloco-info')">
+                <span>Introdução e Informações</span>
+                <span class="seta-expandir">▼</span>
+            </div>
+            <div class="bloco-conteudo" id="info-display">
+                <!-- Conteúdo injetado via JS -->
+            </div>
+        </div>
+
+        <!-- NOVO BLOCO: Roteiro de Teste Sugerido -->
+        <div class="bloco-expansivel" id="bloco-teste">
+            <div class="bloco-header" onclick="ui.toggleBlock('bloco-teste')">
+                <span>Roteiro de Teste Sugerido</span>
+                <span class="seta-expandir">▼</span>
+            </div>
+            <div class="bloco-conteudo">
+                <div class="explicacao-texto" style="border-left-color: var(--cor-secundaria);">
+                    <ol style="padding-left: 20px; line-height: 1.6; font-weight: 500;">
+                        <li><strong>Faça a inclusão de um produto:</strong>
+                            <ul style="margin-top: 5px; margin-bottom: 15px; list-style-type: disc;">
+                                <li>Nome: <em style="color: var(--cor-secundaria);">Café Premium</em></li>
+                                <li>Descrição: <em style="color: var(--cor-secundaria);">Torra Escura 500g</em></li>
+                                <li>GTIN-13: <em style="color: var(--cor-secundaria);">7891234567890</em></li>
+                                <li>Preço: <em style="color: var(--cor-secundaria);">35.90</em></li>
+                            </ul>
+                        </li>
+                        <li><strong>Faça a visualização (Leitura):</strong>
+                            <ul style="margin-top: 5px; margin-bottom: 15px;">
+                                <li>Utilize o código GTIN: <strong>7891234567890</strong></li>
+                            </ul>
+                        </li>
+                        <li><strong>Faça a alteração do produto:</strong>
+                            <ul style="margin-top: 5px; margin-bottom: 15px;">
+                                <li>GTIN (para buscar): <strong>7891234567890</strong></li>
+                                <li>Novo Nome: <em style="color: var(--cor-secundaria);">Café Especial</em></li>
+                                <li>Nova Descrição: <em style="color: var(--cor-secundaria);">Torra Média Moído</em></li>
+                                <li>Novo Preço: <em style="color: var(--cor-secundaria);">42.00</em></li>
+                            </ul>
+                        </li>
+                        <li><strong>Faça a exclusão do produto:</strong>
+                            <ul style="margin-top: 5px; margin-bottom: 15px;">
+                                <li>GTIN: <strong>7891234567890</strong></li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloco 2: Operações e Formulários -->
+        <div class="bloco-expansivel aberto" id="bloco-operacoes">
+            <div class="bloco-header" onclick="ui.toggleBlock('bloco-operacoes')">
+                <span>Preenchimento de Dados e Operações</span>
+                <span class="seta-expandir">▼</span>
+            </div>
+            <div class="bloco-conteudo">
+                
+                <!-- Menu CRUD -->
+                <div class="menu-crud">
+                    <button class="btn-crud" onclick="ui.showCreate()">
+                        <span class="btn-texto">Inserir</span>
+                        <span class="btn-icone">
+                            <img src="img/plus.png" alt="+" onerror="this.style.display='none'; this.parentNode.innerHTML='+'">
+                        </span>
+                    </button>
+                    
+                    <button class="btn-crud" onclick="ui.showRead()">
+                        <span class="btn-texto">Leitura</span>
+                        <span class="btn-icone">
+                            <img src="img/eye.png" alt="O" onerror="this.style.display='none'; this.parentNode.innerHTML='?'">
+                        </span>
+                    </button>
+                    
+                    <button class="btn-crud" onclick="ui.showUpdate()">
+                        <span class="btn-texto">Atualizar</span>
+                        <span class="btn-icone">
+                            <img src="img/change.png" alt="Att" onerror="this.style.display='none'; this.parentNode.innerHTML='✎'">
+                        </span>
+                    </button>
+                    
+                    <button class="btn-crud" onclick="ui.showDelete()">
+                        <span class="btn-texto">Remover</span>
+                        <span class="btn-icone">
+                            <img src="img/remove.png" alt="X" onerror="this.style.display='none'; this.parentNode.innerHTML='X'">
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Área de Formulários -->
+                <div id="form-display" class="form-area">
+                    <p style="text-align:center; opacity:0.7;">Selecione uma opção acima para começar.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bloco 3: Arquivo Geral -->
+        <div class="bloco-expansivel aberto" id="bloco-arquivo">
+            <div class="bloco-header" onclick="ui.toggleBlock('bloco-arquivo')">
+                <span>Arquivo Geral de Produtos (Hex)</span>
+                <span class="seta-expandir">▼</span>
+            </div>
+            <div class="bloco-conteudo">
+                <div id="hex-viewer" class="hex-grid">
+                    <!-- Bytes renderizados aqui -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="secao-vermelha footer-bottom">
+        <div class="info-projeto">Projeto Extensionista PUC Minas - Campus Coreu</div>
+        
+        <a href="https://forms.gle/gAc3NkaBYDp9QAgd9" target="_blank" class="btn-avaliar">Avaliar</a>
+        
+        <div class="link-autores" onclick="ui.toggleModal(true)">Sobre os autores do site</div>
+    </footer>
+
+    <!-- Modal Autores -->
+    <div id="modal-autores" class="modal-overlay">
+        <div class="autores-box-outer">
+            <div class="autores-box-inner">
+                <span class="close-modal" onclick="ui.toggleModal(false)">&times;</span>
+                <h3>Autores do Projeto</h3>
+                <div class="autores-list">
+                    <p>Fabiano Queiroz Guimarães Almeida</p>
+                    <p>Mateus Evangelista do Nascimento</p>
+                    <p>Fernando Theodoro Porto de Paula Dias</p>
+                    <p>Diogo Patrick Cesário de Oliveira</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Backend Simulado (Conversão de Bytes) ---
+        const ByteUtils = {
+            intToHexArray: (num) => {
+                const buffer = new ArrayBuffer(4);
+                const view = new DataView(buffer);
+                view.setInt32(0, num);
+                const arr = [];
+                for(let i=0; i<4; i++) arr.push(view.getUint8(i).toString(16).toUpperCase().padStart(2, '0'));
+                return arr;
+            },
+            floatToHexArray: (num) => {
+                const buffer = new ArrayBuffer(4);
+                const view = new DataView(buffer);
+                view.setFloat32(0, num);
+                const arr = [];
+                for(let i=0; i<4; i++) arr.push(view.getUint8(i).toString(16).toUpperCase().padStart(2, '0'));
+                return arr;
+            },
+            stringToHexArray: (str) => {
+                const encoder = new TextEncoder();
+                const bytes = encoder.encode(str);
+                const len = bytes.length;
+                const lenBuffer = new ArrayBuffer(2);
+                const lenView = new DataView(lenBuffer);
+                lenView.setInt16(0, len);
+                
+                const hexArr = [];
+                hexArr.push(lenView.getUint8(0).toString(16).toUpperCase().padStart(2, '0'));
+                hexArr.push(lenView.getUint8(1).toString(16).toUpperCase().padStart(2, '0'));
+
+                bytes.forEach(b => {
+                    hexArr.push(b.toString(16).toUpperCase().padStart(2, '0'));
+                });
+                return hexArr;
+            }
+        };
+
+        // --- 2. Gerenciamento de Dados (LocalStorage) ---
+        class ProductManager {
+            constructor() {
+                this.storageKey = 'db_produtos_hex';
+                this.products = this.load();
+                this.nextId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
+            }
+            load() {
+                const data = localStorage.getItem(this.storageKey);
+                return data ? JSON.parse(data) : [];
+            }
+            save() {
+                localStorage.setItem(this.storageKey, JSON.stringify(this.products));
+                ui.renderHexView(); 
+            }
+            create(nome, descricao, gtin, preco) {
+                const produto = {
+                    id: this.nextId++,
+                    nome: nome,
+                    descricao: descricao,
+                    gtin: parseInt(gtin),
+                    preco: parseFloat(preco)
+                };
+                this.products.push(produto);
+                this.save();
+                return produto;
+            }
+            read(gtin) {
+                return this.products.find(p => p.gtin === parseInt(gtin));
+            }
+            update(gtin, novosDados) {
+                const index = this.products.findIndex(p => p.gtin === parseInt(gtin));
+                if (index !== -1) {
+                    this.products[index] = { ...this.products[index], ...novosDados };
+                    this.save();
+                    return this.products[index];
+                }
+                return null;
+            }
+            delete(gtin) {
+                const index = this.products.findIndex(p => p.gtin === parseInt(gtin));
+                if (index !== -1) {
+                    const deleted = this.products[index];
+                    this.products.splice(index, 1);
+                    this.save();
+                    return deleted;
+                }
+                return null;
+            }
+            getAllGtins() {
+                return this.products.map(p => p.gtin).join(', ');
+            }
+        }
+
+        const db = new ProductManager();
+
+        // --- 3. Controle de Interface (UI) ---
+        const ui = {
+            init: () => {
+                ui.showIntro();
+                ui.renderHexView();
+            },
+
+            toggleModal: (show) => {
+                const modal = document.getElementById('modal-autores');
+                if(show) modal.classList.add('active');
+                else modal.classList.remove('active');
+            },
+
+            // Função para alternar visibilidade dos blocos
+            toggleBlock: (id) => {
+                const bloco = document.getElementById(id);
+                bloco.classList.toggle('aberto');
+            },
+
+            // Garante que o bloco esteja aberto
+            openBlock: (id) => {
+                const bloco = document.getElementById(id);
+                if (!bloco.classList.contains('aberto')) {
+                    bloco.classList.add('aberto');
+                }
+            },
+
+            renderHexView: () => {
+                const container = document.getElementById('hex-viewer');
+                container.innerHTML = '';
+                
+                db.products.forEach(p => {
+                    ByteUtils.intToHexArray(p.id).forEach(h => ui.createByteBox(container, h, `ID: ${p.id}`, 'byte-id'));
+                    ByteUtils.stringToHexArray(p.nome).forEach(h => ui.createByteBox(container, h, `Nome: ${p.nome}`, 'byte-str'));
+                    ByteUtils.stringToHexArray(p.descricao).forEach(h => ui.createByteBox(container, h, `Desc: ${p.descricao}`, 'byte-len'));
+                    ByteUtils.intToHexArray(p.gtin).forEach(h => ui.createByteBox(container, h, `GTIN: ${p.gtin}`, 'byte-gtin'));
+                    ByteUtils.floatToHexArray(p.preco).forEach(h => ui.createByteBox(container, h, `R$ ${p.preco}`, 'byte-price'));
+                });
+            },
+
+            createByteBox: (container, hex, info, cssClass) => {
+                const div = document.createElement('div');
+                div.className = `byte-box ${cssClass}`;
+                div.textContent = hex;
+                div.setAttribute('data-info', info);
+                container.appendChild(div);
+            },
+
+            setTopInfo: (htmlContent) => {
+                const container = document.getElementById('info-display');
+                container.innerHTML = htmlContent;
+                // Garante que o bloco de info está visível se houver mudança
+                ui.openBlock('bloco-info');
+            },
+
+            setFormArea: (htmlContent) => {
+                const container = document.getElementById('form-display');
+                container.innerHTML = htmlContent;
+                ui.openBlock('bloco-operacoes'); // Garante que o usuário vê o form
+            },
+
+            showIntro: () => {
+                ui.setTopInfo(`
+                    <h2>Introdução</h2>
+                    <p class="explicacao-texto">Este sistema simula o gerenciamento de registros de produtos em um arquivo binário. 
+                    Utilize os botões no bloco de "Preenchimento de Dados" para realizar operações de CRUD. 
+                    No bloco inferior, você verá a representação hexadecimal dos dados armazenados na "memória secundária".</p>
+                `);
+            },
+
+            showExplanation: (texto) => {
+                ui.setTopInfo(`
+                    <h2>Resultado da Operação</h2>
+                    <div class="explicacao-texto"><strong>Detalhes do Armazenamento em Bytes:</strong>\n\n${texto}</div>
+                `);
+                // Scroll suave até o topo da explicação
+                document.getElementById('bloco-info').scrollIntoView({ behavior: 'smooth' });
+            },
+
+            showCreate: () => {
+                ui.setFormArea(`
+                    <h2>Inserir Novo Produto</h2>
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" id="inp-nome">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição:</label>
+                        <input type="text" id="inp-desc">
+                    </div>
+                    <div class="form-group">
+                        <label>GTIN-13 (Numérico):</label>
+                        <input type="number" id="inp-gtin" placeholder="Ex: 789123456">
+                    </div>
+                    <div class="form-group">
+                        <label>Preço (R$):</label>
+                        <input type="number" step="0.01" id="inp-preco">
+                    </div>
+                    <button class="btn-acao" onclick="actions.saveNew()">Salvar Produto</button>
+                `);
+            },
+
+            showRead: () => {
+                ui.renderGtinForm('Ler Produto', 'actions.doRead');
+            },
+
+            showUpdate: () => {
+                ui.renderGtinForm('Atualizar Produto', 'actions.prepareUpdate');
+            },
+
+            showDelete: () => {
+                ui.renderGtinForm('Remover Produto', 'actions.doDelete');
+            },
+
+            renderGtinForm: (titulo, actionFn) => {
+                const gtins = db.getAllGtins() || "Nenhum produto cadastrado.";
+                ui.setFormArea(`
+                    <h2>${titulo}</h2>
+                    <div class="form-group">
+                        <label>Informe o GTIN do produto:</label>
+                        <input type="number" id="target-gtin">
+                        <div class="lista-gtins">GTINs disponíveis: ${gtins}</div>
+                    </div>
+                    <button class="btn-acao" onclick="${actionFn}()">Procurar</button>
+                `);
+            },
+
+            renderUpdateForm: (produto) => {
+                ui.setFormArea(`
+                    <h2>Editando GTIN: ${produto.gtin}</h2>
+                    <input type="hidden" id="edit-gtin" value="${produto.gtin}">
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" id="edit-nome" value="${produto.nome}">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição:</label>
+                        <input type="text" id="edit-desc" value="${produto.descricao}">
+                    </div>
+                    <div class="form-group">
+                        <label>Preço:</label>
+                        <input type="number" step="0.01" id="edit-preco" value="${produto.preco}">
+                    </div>
+                    <button class="btn-acao" onclick="actions.saveUpdate()">Confirmar Atualização</button>
+                    <button class="btn-acao" style="background:#555; margin-top:5px" onclick="ui.showUpdate()">Cancelar</button>
+                `);
+            }
+        };
+
+        // --- 4. Ações dos Botões ---
+        const actions = {
+            saveNew: () => {
+                const nome = document.getElementById('inp-nome').value;
+                const desc = document.getElementById('inp-desc').value;
+                const gtin = document.getElementById('inp-gtin').value;
+                const preco = document.getElementById('inp-preco').value;
+
+                if(!nome || !desc || !gtin || !preco) return alert("Preencha todos os campos!");
+
+                const p = db.create(nome, desc, gtin, preco);
+                actions.generateExplanation(p, "Inserção");
+                ui.showCreate(); 
+            },
+
+            doRead: () => {
+                const gtin = document.getElementById('target-gtin').value;
+                const p = db.read(gtin);
+                if(p) {
+                    actions.generateExplanation(p, "Leitura");
+                } else {
+                    alert("Produto não encontrado!");
+                }
+            },
+
+            prepareUpdate: () => {
+                const gtin = document.getElementById('target-gtin').value;
+                const p = db.read(gtin);
+                if(p) {
+                    ui.renderUpdateForm(p);
+                } else {
+                    alert("Produto não encontrado!");
+                }
+            },
+
+            saveUpdate: () => {
+                const gtin = document.getElementById('edit-gtin').value;
+                const novosDados = {
+                    nome: document.getElementById('edit-nome').value,
+                    descricao: document.getElementById('edit-desc').value,
+                    preco: document.getElementById('edit-preco').value
+                };
+                const p = db.update(gtin, novosDados);
+                actions.generateExplanation(p, "Atualização");
+                ui.showUpdate(); 
+            },
+
+            doDelete: () => {
+                const gtin = document.getElementById('target-gtin').value;
+                if(confirm("Tem certeza que deseja remover este registro?")) {
+                    const p = db.delete(gtin);
+                    if(p) {
+                        alert("Produto removido com sucesso!");
+                        ui.showExplanation("O registro foi removido fisicamente do arquivo (simulação), deslocando os bytes subsequentes para preencher o espaço.");
+                        ui.showDelete();
+                    } else {
+                        alert("Erro ao remover ou produto não encontrado.");
+                    }
+                }
+            },
+
+            generateExplanation: (p, operacao) => {
+                const idHex = ByteUtils.intToHexArray(p.id).join(' ');
+                const gtinHex = ByteUtils.intToHexArray(p.gtin).join(' ');
+                const precoHex = ByteUtils.floatToHexArray(p.preco).join(' ');
+                
+                const nomeBytes = ByteUtils.stringToHexArray(p.nome);
+                const nomeLen = nomeBytes.slice(0,2).join(' ');
+                const nomeContent = nomeBytes.slice(2).join(' ');
+
+                const descBytes = ByteUtils.stringToHexArray(p.descricao);
+                const descLen = descBytes.slice(0,2).join(' ');
+                
+                let text = `Operação: ${operacao} realizada com sucesso.\n`;
+                text += `\nCampo ID (${p.id}):\n - Tipo: Int (4 bytes)\n - Hex: [${idHex}]\n`;
+                text += `\nCampo Nome ("${p.nome}"):\n - Tipo: String UTF-8\n - Tamanho (Short): [${nomeLen}]\n - Conteúdo: [${nomeContent}]\n`;
+                text += `\nCampo Descrição (Início...):\n - Tipo: String UTF-8\n - Tamanho (Short): [${descLen}]\n - (Conteúdo omitido para brevidade)\n`;
+                text += `\nCampo GTIN (${p.gtin}):\n - Tipo: Int (4 bytes)\n - Hex: [${gtinHex}]\n - Nota: Armazenado como inteiro de 32 bits.\n`;
+                text += `\nCampo Preço (${p.preco}):\n - Tipo: Float (4 bytes - IEEE 754)\n - Hex: [${precoHex}]\n`;
+                
+                ui.showExplanation(text);
+                // Rola para a área de explicação
+                ui.openBlock('bloco-info');
+            }
+        };
+
+        window.onload = ui.init;
+
+    </script>
+</body>
+</html>
